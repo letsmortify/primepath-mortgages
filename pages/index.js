@@ -1,5 +1,5 @@
-import '../styles/globals.css'
+import PrimePathMortgages from '../components/PrimePathMortgages'
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
+export default function Home() {
+  return <PrimePathMortgages />
 }
