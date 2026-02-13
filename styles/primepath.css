@@ -1,4 +1,5 @@
-margin: 0;
+* {
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
@@ -410,6 +411,7 @@ label {
   background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 32px;
 }
 
@@ -691,3 +693,4 @@ label {
   .banks-grid {
     grid-template-columns: 1fr;
   }
+}
