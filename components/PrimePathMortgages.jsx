@@ -93,6 +93,37 @@ const BANK_POLICIES = {
     strengths: ["Personalized banking", "Premium customers", "Fast processing"]
   }
 };
+// NCR MICRO-MARKET DATA (From PropIndex Q4 2025)
+const NCR_MICROMARKETS = {
+  gurugram: [
+    { id: 'new-gurugram', name: 'New Gurugram', sectors: 'Sectors 70-115', avgPrice: 10350, growth: '+34% YoY', temp: 'hot' },
+    { id: 'dwarka-exp', name: 'Dwarka Expressway', sectors: 'Sectors 99-113', avgPrice: 11000, growth: '+100% since 2019', temp: 'hot' },
+    { id: 'golf-ext', name: 'Golf Course Extension', sectors: 'Sectors 58-68', avgPrice: 19500, growth: '+21% YoY', temp: 'warm' },
+    { id: 'sohna-road', name: 'Sohna Road', sectors: 'Sectors 47-49, 88', avgPrice: 17400, growth: '+30% YoY', temp: 'hot' },
+    { id: 'old-gurugram', name: 'Old Gurugram', sectors: 'DLF Phase 1-4, Sushant Lok', avgPrice: 19000, growth: '+9% YoY', temp: 'warm' },
+    { id: 'sohna', name: 'Sohna', sectors: 'South Gurugram', avgPrice: 6000, growth: '+193% launches', temp: 'hot' }
+  ],
+  noida: [
+    { id: 'sector-150', name: 'Sector 150', sectors: 'Sectors 150-168', avgPrice: 8450, growth: '+24% YoY', temp: 'hot' },
+    { id: 'gr-noida-west', name: 'Greater Noida West', sectors: 'Tech Zone IV, KP V', avgPrice: 8450, growth: '+150% launches', temp: 'hot' },
+    { id: 'noida-exp', name: 'Noida Expressway', sectors: 'Sectors 74-137', avgPrice: 13400, growth: '+10% YoY', temp: 'warm' },
+    { id: 'central-noida', name: 'Central Noida', sectors: 'Sectors 15-50', avgPrice: 16000, growth: '+9% YoY', temp: 'warm' }
+  ],
+  'greater-noida': [
+    { id: 'gr-noida-west', name: 'Greater Noida West', sectors: 'Tech Zone IV', avgPrice: 8450, growth: '+24% YoY', temp: 'hot' },
+    { id: 'yamuna-exp', name: 'Yamuna Expressway', sectors: 'Near Jewar Airport', avgPrice: 4500, growth: 'Airport impact', temp: 'hot' }
+  ],
+  delhi: [
+    { id: 'dwarka', name: 'Dwarka', sectors: 'Sectors 1-29', avgPrice: 14800, growth: '+11% YoY', temp: 'warm' },
+    { id: 'rohini', name: 'Rohini', sectors: 'Sectors 1-24', avgPrice: 13500, growth: '+10% YoY', temp: 'warm' }
+  ],
+  ghaziabad: [
+    { id: 'indirapuram', name: 'Indirapuram', sectors: 'Main area', avgPrice: 7500, growth: '+8% YoY', temp: 'warm' }
+  ],
+  faridabad: [
+    { id: 'greater-faridabad', name: 'Greater Faridabad', sectors: 'Main area', avgPrice: 6500, growth: '+7% YoY', temp: 'warm' }
+  ]
+};
 
 const PrimePathMortgages = () => {
   const [currentLayer, setCurrentLayer] = useState('intro'); // intro, layer1, layer2, results
@@ -112,7 +143,8 @@ const PrimePathMortgages = () => {
     decidingDocument: '', // agreement-to-sell, booking-form, property-papers
     propertyValue: '', // from deciding document
     propertyLocation: ''
-  });
+    microMarket: '' // NEW - Specific area/zone
+});
 
   const [results, setResults] = useState(null);
 
@@ -264,18 +296,23 @@ const PrimePathMortgages = () => {
     setCurrentLayer('layer2');
   };
 
-  const handleLayer2Submit = () => {
-    const allFilled = Object.values(layer2Data).every(val => val !== '');
-    if (!allFilled) {
-      alert('Please fill all fields');
-      return;
-    }
-    
+const handleLayer2Submit = () => {
+  const allFilled = Object.values(layer2Data).every(val => val !== '');
+  if (!allFilled) {
+    alert('Please fill all fields');
+    return;
+  }
+  
+  // Go to property insights first (if micro-market selected)
+  if (layer2Data.microMarket) {
+    setCurrentLayer('propertyInsights');
+  } else {
+    // Skip insights if no micro-market
     const results = matchBanks();
     setResults(results);
     setCurrentLayer('results');
-  };
-
+  }
+};
   const renderIntro = () => (
     <div className="intro-container">
       <div className="intro-content">
@@ -592,6 +629,25 @@ const PrimePathMortgages = () => {
           </select>
         </div>
 
+        {/* Micro-Market Selection - Only show after city is selected */}
+{layer2Data.propertyLocation && NCR_MICROMARKETS[layer2Data.propertyLocation] && (
+  <div className="input-group">
+    <label>Specific Area / Zone</label>
+    <select
+      value={layer2Data.microMarket}
+      onChange={(e) => setLayer2Data({...layer2Data, microMarket: e.target.value})}
+      className="select-input"
+    >
+      <option value="">Select your area...</option>
+      {NCR_MICROMARKETS[layer2Data.propertyLocation].map(zone => (
+        <option key={zone.id} value={zone.id}>
+          {zone.name} ({zone.sectors}) • ₹{zone.avgPrice.toLocaleString()}/sq ft • {zone.growth}
+        </option>
+      ))}
+    </select>
+    <span className="hint">This helps us give you accurate market insights</span>
+  </div>
+)}
         <div className="nav-buttons">
           <button className="btn-back" onClick={() => setCurrentLayer('layer1')}>
             ← Back
@@ -603,6 +659,167 @@ const PrimePathMortgages = () => {
       </div>
     </div>
   );
+const renderPropertyInsights = () => {
+  if (!layer2Data.microMarket) {
+    // Skip if no micro-market selected
+    setCurrentLayer('results');
+    return null;
+  }
+
+  // Get market data
+  const cityData = NCR_MICROMARKETS[layer2Data.propertyLocation];
+  const zoneData = cityData?.find(z => z.id === layer2Data.microMarket);
+  
+  if (!zoneData) {
+    setCurrentLayer('results');
+    return null;
+  }
+
+  // Calculate property metrics
+  const propertyVal = parseInt(layer2Data.propertyValue);
+  const estimatedSqFt = propertyVal / zoneData.avgPrice;
+  const priceDiff = ((propertyVal / estimatedSqFt) - zoneData.avgPrice) / zoneData.avgPrice * 100;
+  const isGoodDeal = priceDiff < -10;
+  const isExpensive = priceDiff > 10;
+
+  return (
+    <div className="layer-container" style={{ maxWidth: '900px' }}>
+      <div className="layer-header">
+        <div className="layer-badge">Property Intelligence</div>
+        <h2>📍 Market Insights: {zoneData.name}</h2>
+        <p>Real data from PropIndex Q4 2025</p>
+      </div>
+
+      <div className="insights-grid">
+        {/* Price Comparison */}
+        <div className="insight-card price-card">
+          <h3>💰 Price Analysis</h3>
+          <div className="price-comparison">
+            <div className="price-row">
+              <span>Your Property Value:</span>
+              <strong>₹{(propertyVal / 100000).toFixed(1)}L</strong>
+            </div>
+            <div className="price-row">
+              <span>Area Average:</span>
+              <strong>₹{zoneData.avgPrice.toLocaleString()}/sq ft</strong>
+            </div>
+            <div className="price-row">
+              <span>Estimated Size:</span>
+              <strong>~{Math.round(estimatedSqFt)} sq ft</strong>
+            </div>
+          </div>
+          
+          {isGoodDeal && (
+            <div className="alert-box good-deal">
+              ✅ <strong>Good Deal!</strong> Your price is {Math.abs(priceDiff).toFixed(0)}% below market average
+            </div>
+          )}
+          {isExpensive && (
+            <div className="alert-box verify-alert">
+              ⚠️ <strong>Above Market:</strong> {priceDiff.toFixed(0)}% higher than average. Verify builder reputation & amenities.
+            </div>
+          )}
+          {!isGoodDeal && !isExpensive && (
+            <div className="alert-box neutral">
+              ✓ <strong>Fair Price:</strong> Within {Math.abs(priceDiff).toFixed(0)}% of market average
+            </div>
+          )}
+        </div>
+
+        {/* Market Temperature */}
+        <div className="insight-card temp-card">
+          <h3>🌡️ Investment Temperature</h3>
+          <div className={`temp-badge ${zoneData.temp}`}>
+            {zoneData.temp === 'hot' && '🔥 HOT ZONE'}
+            {zoneData.temp === 'warm' && '📈 WARM'}
+            {zoneData.temp === 'cool' && '📊 STABLE'}
+          </div>
+          <div className="temp-details">
+            <div className="temp-row">
+              <span>Price Growth:</span>
+              <strong>{zoneData.growth}</strong>
+            </div>
+            <div className="temp-row">
+              <span>Coverage:</span>
+              <strong>{zoneData.sectors}</strong>
+            </div>
+          </div>
+          
+          {zoneData.temp === 'hot' && (
+            <p className="temp-note">
+              High developer activity & strong price appreciation. Good for investment.
+            </p>
+          )}
+        </div>
+
+        {/* Location Highlights */}
+        <div className="insight-card location-card">
+          <h3>📍 Area Highlights</h3>
+          <ul className="highlights-list">
+            {layer2Data.propertyLocation === 'gurugram' && layer2Data.microMarket === 'dwarka-exp' && (
+              <>
+                <li>✓ Operational Dwarka Expressway (2024)</li>
+                <li>✓ 15 min to IGI Airport</li>
+                <li>✓ Proposed Metro connectivity</li>
+                <li>✓ 89% ultra-luxury launches</li>
+              </>
+            )}
+            {layer2Data.propertyLocation === 'gurugram' && layer2Data.microMarket === 'new-gurugram' && (
+              <>
+                <li>✓ Cyber City 3.0 development nearby</li>
+                <li>✓ Proposed Metro Phase 5</li>
+                <li>✓ Strong employment hub</li>
+                <li>✓ 11,300 units launched in 2024</li>
+              </>
+            )}
+            {layer2Data.propertyLocation === 'noida' && layer2Data.microMarket === 'sector-150' && (
+              <>
+                <li>✓ Well-planned green layout</li>
+                <li>✓ Metro connectivity</li>
+                <li>✓ Close to Film City</li>
+                <li>✓ 24% YoY price growth</li>
+              </>
+            )}
+            {layer2Data.propertyLocation === 'greater-noida' && layer2Data.microMarket === 'yamuna-exp' && (
+              <>
+                <li>✓ Near Noida International Airport (Jewar)</li>
+                <li>✓ Airport operational by 2026</li>
+                <li>✓ Most affordable NCR zone</li>
+                <li>✓ High growth potential</li>
+              </>
+            )}
+            {/* Default if no specific highlights */}
+            {(!layer2Data.microMarket || 
+              (layer2Data.propertyLocation === 'gurugram' && !['dwarka-exp', 'new-gurugram'].includes(layer2Data.microMarket)) &&
+              (layer2Data.propertyLocation === 'noida' && layer2Data.microMarket !== 'sector-150') &&
+              (layer2Data.propertyLocation === 'greater-noida' && layer2Data.microMarket !== 'yamuna-exp')
+            ) && (
+              <>
+                <li>✓ Established residential area</li>
+                <li>✓ Good social infrastructure</li>
+                <li>✓ Active property market</li>
+                <li>✓ Steady appreciation trend</li>
+              </>
+            )}
+          </ul>
+        </div>
+      </div>
+
+      <div className="nav-buttons">
+        <button className="btn-back" onClick={() => setCurrentLayer('layer2')}>
+          ← Back to Property Details
+        </button>
+        <button className="btn-next" onClick={() => {
+          const results = matchBanks();
+          setResults(results);
+          setCurrentLayer('results');
+        }}>
+          See My Bank Matches <ArrowRight size={20} />
+        </button>
+      </div>
+    </div>
+  );
+};
 
   const renderResults = () => {
     if (!results) return null;
@@ -861,12 +1078,14 @@ const PrimePathMortgages = () => {
   };
 
   return (
-    <div className="app">
-      {currentLayer === 'intro' && renderIntro()}
-      {currentLayer === 'layer1' && renderLayer1()}
-      {currentLayer === 'layer2' && renderLayer2()}
-      {currentLayer === 'results' && renderResults()}
-
+  <div className="app">
+    {currentLayer === 'intro' && renderIntro()}
+    {currentLayer === 'layer1' && renderLayer1()}
+    {currentLayer === 'layer2' && renderLayer2()}
+    {currentLayer === 'propertyInsights' && renderPropertyInsights()}
+    {currentLayer === 'results' && renderResults()}
+    
+    <style jsx>{`
     </div>
   );
 };
