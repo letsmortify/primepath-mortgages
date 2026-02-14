@@ -297,12 +297,14 @@ const PrimePathMortgages = () => {
   };
 
 const handleLayer2Submit = () => {
-  const allFilled = Object.values(layer2Data).every(val => val !== '');
-  if (!allFilled) {
-    alert('Please fill all fields');
-    return;
-  }
+  // Check required fields (microMarket is optional)
+  const requiredFields = ['loanType', 'propertyCategory', 'decidingDocument', 'propertyValue', 'propertyLocation'];
+  const allRequiredFilled = requiredFields.every(field => layer2Data[field] !== '');
   
+  if (!allRequiredFilled) {
+    alert('Please fill all required fields');
+    return;
+  }  
   // Go to property insights first (if micro-market selected)
   if (layer2Data.microMarket) {
     setCurrentLayer('propertyInsights');
