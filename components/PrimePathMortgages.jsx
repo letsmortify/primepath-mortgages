@@ -142,7 +142,7 @@ const PrimePathMortgages = () => {
     propertyCategory: '', // For HL: builder-new, resale. For LAP: residential, commercial
     decidingDocument: '', // agreement-to-sell, booking-form, property-papers
     propertyValue: '', // from deciding document
-    propertyLocation: ''
+    propertyLocation: '',
     microMarket: '' // NEW - Specific area/zone
 });
 
