@@ -1086,9 +1086,7 @@ const renderPropertyInsights = () => {
     {currentLayer === 'layer2' && renderLayer2()}
     {currentLayer === 'propertyInsights' && renderPropertyInsights()}
     {currentLayer === 'results' && renderResults()}
-    
-    <style jsx>{`
-    </div>
+  </div>
   );
 };
 
