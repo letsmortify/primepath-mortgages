@@ -670,32 +670,37 @@ const handleLayer2Submit = () => {
         </div>
 
         {/* PROPERTY SUB-TYPE - Show after loan type selected */}
-        {layer2Data.loanType && (
-          <div className="input-group">
-            <label>🏠 What type of property?</label>
-            <div className="radio-group vertical" style={{marginTop:'8px'}}>
-              {layer2Data.loanType === 'HL' ? [
-                { val: 'apartment', emoji: '🏢', title: 'Apartment / Flat', desc: 'Multi-storey builder floor or society flat' },
-                { val: 'plot', emoji: '🌳', title: 'Residential Plot / Land', desc: 'Open plot for construction' },
-                { val: 'house', emoji: '🏡', title: 'Independent House / Villa', desc: 'Row house, bungalow, builder floor' },
-              ] : [
-                { val: 'office', emoji: '🏛️', title: 'Office / Commercial Space', desc: 'Loan Against Property — commercial use' },
-                { val: 'apartment', emoji: '🏢', title: 'Residential Apartment', desc: 'Loan Against existing flat / house' },
-                { val: 'plot', emoji: '🌳', title: 'Residential Plot', desc: 'Loan against owned plot' },
-              ]}.map(opt => (
-                <label key={opt.val} className="radio-card" style={{borderColor: layer2Data.propertySubType === opt.val ? '#2563eb' : '#e2e8f0', background: layer2Data.propertySubType === opt.val ? '#eff6ff' : 'white'}}>
-                  <input type="radio" name="propertySubType" value={opt.val}
-                    checked={layer2Data.propertySubType === opt.val}
-                    onChange={(e) => setLayer2Data({...layer2Data, propertySubType: e.target.value})} />
-                  <div>
-                    <strong>{opt.emoji} {opt.title}</strong>
-                    <p>{opt.desc}</p>
-                  </div>
-                </label>
-              ))}
+        {layer2Data.loanType && (() => {
+          const hlOptions = [
+            { val: 'apartment', emoji: '🏢', title: 'Apartment / Flat', desc: 'Multi-storey builder floor or society flat' },
+            { val: 'plot', emoji: '🌳', title: 'Residential Plot / Land', desc: 'Open plot for construction' },
+            { val: 'house', emoji: '🏡', title: 'Independent House / Villa', desc: 'Row house, bungalow, builder floor' },
+          ];
+          const lapOptions = [
+            { val: 'office', emoji: '🏛️', title: 'Office / Commercial Space', desc: 'Loan Against Property — commercial use' },
+            { val: 'apartment', emoji: '🏢', title: 'Residential Apartment', desc: 'Loan against existing flat / house' },
+            { val: 'plot', emoji: '🌳', title: 'Residential Plot', desc: 'Loan against owned plot' },
+          ];
+          const options = layer2Data.loanType === 'HL' ? hlOptions : lapOptions;
+          return (
+            <div className="input-group">
+              <label>🏠 What type of property?</label>
+              <div className="radio-group vertical" style={{marginTop:'8px'}}>
+                {options.map(opt => (
+                  <label key={opt.val} className="radio-card" style={{borderColor: layer2Data.propertySubType === opt.val ? '#2563eb' : '#e2e8f0', background: layer2Data.propertySubType === opt.val ? '#eff6ff' : 'white'}}>
+                    <input type="radio" name="propertySubType" value={opt.val}
+                      checked={layer2Data.propertySubType === opt.val}
+                      onChange={(e) => setLayer2Data({...layer2Data, propertySubType: e.target.value})} />
+                    <div>
+                      <strong>{opt.emoji} {opt.title}</strong>
+                      <p>{opt.desc}</p>
+                    </div>
+                  </label>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {layer2Data.loanType === 'HL' && (
           <div className="input-group">
