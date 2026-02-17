@@ -100,36 +100,52 @@ const NCR_MICROMARKETS = {
     { id: 'dwarka-exp', name: 'Dwarka Expressway', sectors: 'Sectors 99-113', avgPrice: 11000, growth: '+100% since 2019', temp: 'hot' },
     { id: 'golf-ext', name: 'Golf Course Extension', sectors: 'Sectors 58-68', avgPrice: 19500, growth: '+21% YoY', temp: 'warm' },
     { id: 'sohna-road', name: 'Sohna Road', sectors: 'Sectors 47-49, 88', avgPrice: 17400, growth: '+30% YoY', temp: 'hot' },
-    { id: 'old-gurugram', name: 'Old Gurugram', sectors: 'DLF Phase 1-4, Sushant Lok', avgPrice: 19000, growth: '+9% YoY', temp: 'warm' },
-    { id: 'sohna', name: 'Sohna', sectors: 'South Gurugram', avgPrice: 6000, growth: '+193% launches', temp: 'hot' }
+    { id: 'old-gurugram', name: 'Old Gurugram / DLF Phases', sectors: 'DLF Phase 1-4, Sushant Lok', avgPrice: 19000, growth: '+9% YoY', temp: 'warm' },
+    { id: 'sohna', name: 'Sohna (South Gurugram)', sectors: 'Sohna town & vicinity', avgPrice: 6000, growth: '+193% launches', temp: 'hot' }
   ],
   noida: [
-    { id: 'sector-150', name: 'Sector 150', sectors: 'Sectors 150-168', avgPrice: 8450, growth: '+24% YoY', temp: 'hot' },
-    { id: 'gr-noida-west', name: 'Greater Noida West', sectors: 'Tech Zone IV, KP V', avgPrice: 8450, growth: '+150% launches', temp: 'hot' },
+    { id: 'central-noida', name: 'Central Noida', sectors: 'Sectors 15-50', avgPrice: 16000, growth: '+9% YoY', temp: 'warm' },
+    { id: 'noida-sectors-51-100', name: 'Mid Noida', sectors: 'Sectors 51-100', avgPrice: 14000, growth: '+10% YoY', temp: 'warm' },
     { id: 'noida-exp', name: 'Noida Expressway', sectors: 'Sectors 74-137', avgPrice: 13400, growth: '+10% YoY', temp: 'warm' },
-    { id: 'central-noida', name: 'Central Noida', sectors: 'Sectors 15-50', avgPrice: 16000, growth: '+9% YoY', temp: 'warm' }
+    { id: 'sector-150', name: 'Sector 150 Zone', sectors: 'Sectors 100-149', avgPrice: 10000, growth: '+15% YoY', temp: 'hot' },
+    { id: 'new-noida', name: 'New Noida / South', sectors: 'Sectors 150-168', avgPrice: 8450, growth: '+24% YoY', temp: 'hot' },
+    { id: 'gr-noida-west', name: 'Greater Noida West', sectors: 'Tech Zone IV, KP V', avgPrice: 8450, growth: '+150% launches', temp: 'hot' }
   ],
   'greater-noida': [
-    { id: 'gr-noida-west', name: 'Greater Noida West', sectors: 'Tech Zone IV', avgPrice: 8450, growth: '+24% YoY', temp: 'hot' },
-    { id: 'yamuna-exp', name: 'Yamuna Expressway', sectors: 'Near Jewar Airport', avgPrice: 4500, growth: 'Airport impact', temp: 'hot' }
+    { id: 'gnw-main', name: 'Greater Noida West', sectors: 'Tech Zone IV, Knowledge Park', avgPrice: 8450, growth: '+24% YoY', temp: 'hot' },
+    { id: 'yamuna-exp', name: 'Yamuna Expressway', sectors: 'Sectors near Jewar Airport', avgPrice: 4500, growth: 'Airport impact zone', temp: 'hot' },
+    { id: 'gnida-sectors', name: 'Greater Noida Central', sectors: 'Alpha, Beta, Gamma sectors', avgPrice: 7000, growth: '+8% YoY', temp: 'warm' }
   ],
   delhi: [
-    { id: 'dwarka', name: 'Dwarka', sectors: 'Sectors 1-29', avgPrice: 14800, growth: '+11% YoY', temp: 'warm' },
-    { id: 'rohini', name: 'Rohini', sectors: 'Sectors 1-24', avgPrice: 13500, growth: '+10% YoY', temp: 'warm' }
+    { id: 'south-delhi', name: 'South Delhi', sectors: 'Saket, GK 1&2, Defence Colony, Lajpat Nagar', avgPrice: 22000, growth: '+8% YoY', temp: 'warm' },
+    { id: 'west-delhi', name: 'West Delhi', sectors: 'Dwarka, Janakpuri, Rajouri Garden, Uttam Nagar', avgPrice: 14800, growth: '+11% YoY', temp: 'warm' },
+    { id: 'north-delhi', name: 'North Delhi', sectors: 'Rohini, Pitampura, Model Town, Shakurpur', avgPrice: 13500, growth: '+10% YoY', temp: 'warm' },
+    { id: 'east-delhi', name: 'East Delhi', sectors: 'Laxmi Nagar, Mayur Vihar, Preet Vihar, IP Ext', avgPrice: 12000, growth: '+9% YoY', temp: 'warm' },
+    { id: 'north-west-delhi', name: 'North-West Delhi', sectors: 'Paschim Vihar, Shalimar Bagh, Ashok Vihar', avgPrice: 15000, growth: '+9% YoY', temp: 'warm' },
+    { id: 'central-delhi', name: 'Central Delhi', sectors: 'Karol Bagh, Paharganj, Civil Lines', avgPrice: 18000, growth: '+7% YoY', temp: 'warm' }
   ],
   ghaziabad: [
-    { id: 'indirapuram', name: 'Indirapuram', sectors: 'Main area', avgPrice: 7500, growth: '+8% YoY', temp: 'warm' }
+    { id: 'indirapuram', name: 'Indirapuram', sectors: 'Shakti Khand, Niti Khand, Ahinsa Khand', avgPrice: 7500, growth: '+8% YoY', temp: 'warm' },
+    { id: 'vaishali', name: 'Vaishali / Vasundhara', sectors: 'Sectors 1-6', avgPrice: 6800, growth: '+9% YoY', temp: 'warm' },
+    { id: 'raj-nagar-ext', name: 'Raj Nagar Extension', sectors: 'NH-58 corridor', avgPrice: 4500, growth: '+12% YoY', temp: 'hot' },
+    { id: 'crossings-rep', name: 'Crossings Republik', sectors: 'NH-24 Belt', avgPrice: 5500, growth: '+14% YoY', temp: 'hot' },
+    { id: 'siddharth-vihar', name: 'Siddharth Vihar / Tronica City', sectors: 'Upcoming zone', avgPrice: 4000, growth: '+18% YoY', temp: 'hot' }
   ],
   faridabad: [
-    { id: 'greater-faridabad', name: 'Greater Faridabad', sectors: 'Main area', avgPrice: 6500, growth: '+7% YoY', temp: 'warm' }
+    { id: 'nhpc-nit', name: 'NIT / NHPC Area', sectors: 'Central Faridabad', avgPrice: 6800, growth: '+7% YoY', temp: 'warm' },
+    { id: 'sector-15-21', name: 'Sectors 15-21', sectors: 'Old Faridabad', avgPrice: 7200, growth: '+6% YoY', temp: 'warm' },
+    { id: 'greater-faridabad', name: 'Greater Faridabad', sectors: 'Sectors 75-89', avgPrice: 5500, growth: '+10% YoY', temp: 'warm' },
+    { id: 'neharpar', name: 'Neharpar / Greenfield', sectors: 'Sectors 88-96, Faridabad-Gurgaon Road', avgPrice: 4500, growth: '+12% YoY', temp: 'hot' }
   ]
 };
 
 const PrimePathMortgages = () => {
   const [currentLayer, setCurrentLayer] = useState('intro'); // intro, layer1, layer2, results
   const [layer1Data, setLayer1Data] = useState({
+    customerPreference: '', // speed, rate, cost, service
     loanAmountNeeded: '',
     monthlyIncome: '',
+    loanTenure: '20', // years - default 20
     existingEMIs: '',
     borrowerType: '', // first-time or repeat
     missedPayments12m: '', // yes/no
@@ -158,9 +174,9 @@ const PrimePathMortgages = () => {
     const maxTotalEMI = income * maxDBR;
     const availableForNewLoan = maxTotalEMI - existingEMI;
     
-    // Calculate loan amount (20 years @ 8.5% avg rate)
+    // Calculate loan amount using customer-selected tenure
     const monthlyRate = 8.5 / 12 / 100;
-    const tenureMonths = 20 * 12;
+    const tenureMonths = parseInt(layer1Data.loanTenure || 20) * 12;
     const loanCapacity = availableForNewLoan * ((Math.pow(1 + monthlyRate, tenureMonths) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)));
     
     return Math.round(loanCapacity);
@@ -236,23 +252,54 @@ const PrimePathMortgages = () => {
         matchScore -= 20;
       }
       
-      // 5. Property type bonus (10 points)
+      // 5. Property type bonus (10 points) - balanced
       if (layer2Data.propertyCategory === 'builder-new' && bank.category === 'Private') {
         matchScore += 10;
-        reasons.push("Private banks prefer builder properties");
+        reasons.push("Private banks have fastest processing for builder properties");
+      } else if (layer2Data.propertyCategory === 'builder-new' && bank.category === 'Government') {
+        matchScore += 5;
+        reasons.push("Government banks offer competitive rates for new properties");
       } else if (layer2Data.propertyCategory === 'resale' && bank.category === 'Government') {
-        matchScore += 8;
+        matchScore += 10;
+        reasons.push("Government banks prefer resale properties with clear titles");
+      } else if (layer2Data.propertyCategory === 'resale' && bank.category === 'Private') {
+        matchScore += 5;
+        reasons.push("Private banks accept resale with verified documentation");
+      }
+
+      // 6. Customer Preference Bonus (15 points)
+      const pref = layer1Data.customerPreference;
+      if (pref === 'rate') {
+        // Prefer lowest rate
+        if (bank.category === 'Government') { matchScore += 15; reasons.push("Best interest rates — saves ₹2-5L over loan tenure"); }
+        else if (bank.category === 'Private') { matchScore += 8; }
+        else { matchScore += 5; }
+      } else if (pref === 'speed') {
+        // Prefer fastest processing
+        if (bank.category === 'Private') { matchScore += 15; reasons.push("Fastest disbursement: 10-18 days vs 30-45 for PSU banks"); }
+        else if (bank.category === 'Multinational') { matchScore += 12; reasons.push("Premium fast-track service available"); }
+        else { matchScore += 5; }
+      } else if (pref === 'cost') {
+        // Prefer lowest upfront cost
+        if (bank.processingFee <= 0.30) { matchScore += 15; reasons.push("Lowest processing fees — minimal upfront costs"); }
+        else if (bank.processingFee <= 0.40) { matchScore += 10; }
+        else { matchScore += 5; }
+      } else if (pref === 'service') {
+        // Prefer premium service
+        if (bank.category === 'Multinational') { matchScore += 15; reasons.push("Premium relationship banking with dedicated RM"); }
+        else if (bank.category === 'Private') { matchScore += 10; reasons.push("Digital-first experience with dedicated support"); }
+        else { matchScore += 5; }
       }
       
-      // Calculate EMI
+      // Calculate EMI using customer-selected tenure
       const rate = layer2Data.loanType === 'HL' ? bank.rateHL : bank.rateLAP;
       const monthlyRate = rate / 12 / 100;
-      const tenureMonths = 20 * 12;
+      const tenureMonths = parseInt(layer1Data.loanTenure || 20) * 12;
       const emi = finalEligibleAmount * (monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) / (Math.pow(1 + monthlyRate, tenureMonths) - 1);
       
-      // Calculate costs
+      // Calculate costs - indicative only, as per bank's portal
+      const processingFeeIndicative = `~${bank.processingFee}% of loan amount`;
       const processingFee = Math.round(finalEligibleAmount * bank.processingFee / 100);
-      const totalUpfront = processingFee + 500 + 3000; // processing + application + valuation
       
       const approvalProbability = disqualifiers.length === 0 ? Math.min(matchScore, 95) : Math.min(matchScore * 0.5, 40);
       
@@ -269,7 +316,8 @@ const PrimePathMortgages = () => {
         emi: Math.round(emi),
         interestRate: rate,
         processingFee,
-        totalUpfront,
+        processingFeeIndicative: `~${bank.processingFee}% of loan amount (check bank's website)`,
+        totalUpfront: `As per ${bank.shortName}'s portal/app`,
         ltv: (bankLTV * 100).toFixed(0)
       });
     });
@@ -287,10 +335,10 @@ const PrimePathMortgages = () => {
   };
 
   const handleLayer1Submit = () => {
-    // Validate all fields filled
-    const allFilled = Object.values(layer1Data).every(val => val !== '');
+    const requiredLayer1 = ['customerPreference', 'loanAmountNeeded', 'monthlyIncome', 'loanTenure', 'existingEMIs', 'borrowerType', 'missedPayments12m', 'missedPayments5y', 'cibilRange'];
+    const allFilled = requiredLayer1.every(f => layer1Data[f] !== '');
     if (!allFilled) {
-      alert('Please fill all fields');
+      alert('Please fill all fields to continue');
       return;
     }
     setCurrentLayer('layer2');
@@ -370,6 +418,31 @@ const handleLayer2Submit = () => {
       </div>
 
       <div className="form-section">
+
+        {/* CUSTOMER PREFERENCE - First question */}
+        <div className="input-group">
+          <label>🎯 What matters most to you in a home loan?</label>
+          <span className="hint">This helps us rank banks based on YOUR priority</span>
+          <div className="radio-group vertical" style={{marginTop: '8px'}}>
+            {[
+              { val: 'rate', emoji: '💰', title: 'Lowest Interest Rate', desc: 'Save ₹2-5L over loan tenure' },
+              { val: 'speed', emoji: '⚡', title: 'Fastest Processing', desc: 'Disbursement in 10-18 days' },
+              { val: 'cost', emoji: '🏷️', title: 'Lowest Upfront Costs', desc: 'Minimal processing fees' },
+              { val: 'service', emoji: '🤝', title: 'Premium Service', desc: 'Dedicated RM & support' },
+            ].map(opt => (
+              <label key={opt.val} className="radio-card" style={{borderColor: layer1Data.customerPreference === opt.val ? '#2563eb' : '#e2e8f0', background: layer1Data.customerPreference === opt.val ? '#eff6ff' : 'white'}}>
+                <input type="radio" name="customerPreference" value={opt.val}
+                  checked={layer1Data.customerPreference === opt.val}
+                  onChange={(e) => setLayer1Data({...layer1Data, customerPreference: e.target.value})} />
+                <div>
+                  <strong>{opt.emoji} {opt.title}</strong>
+                  <p>{opt.desc}</p>
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
+
         <div className="input-group">
           <label>How much loan do you need?</label>
           <div className="currency-input">
@@ -397,6 +470,24 @@ const handleLayer2Submit = () => {
           <span className="hint">After all deductions (PF, tax, etc.)</span>
         </div>
 
+        {/* LOAN TENURE */}
+        <div className="input-group">
+          <label>Preferred Loan Tenure</label>
+          <select
+            value={layer1Data.loanTenure}
+            onChange={(e) => setLayer1Data({...layer1Data, loanTenure: e.target.value})}
+            className="select-input"
+          >
+            <option value="5">5 Years</option>
+            <option value="10">10 Years</option>
+            <option value="15">15 Years</option>
+            <option value="20">20 Years (Recommended)</option>
+            <option value="25">25 Years</option>
+            <option value="30">30 Years</option>
+          </select>
+          <span className="hint">Longer tenure = lower EMI but higher total interest paid</span>
+        </div>
+
         <div className="input-group">
           <label>Current Total Monthly EMIs</label>
           <div className="currency-input">
@@ -415,23 +506,15 @@ const handleLayer2Submit = () => {
           <label>Are you a first-time borrower?</label>
           <div className="radio-group">
             <label className="radio-option">
-              <input
-                type="radio"
-                name="borrowerType"
-                value="first-time"
+              <input type="radio" name="borrowerType" value="first-time"
                 checked={layer1Data.borrowerType === 'first-time'}
-                onChange={(e) => setLayer1Data({...layer1Data, borrowerType: e.target.value})}
-              />
+                onChange={(e) => setLayer1Data({...layer1Data, borrowerType: e.target.value})} />
               <span>Yes, first home loan</span>
             </label>
             <label className="radio-option">
-              <input
-                type="radio"
-                name="borrowerType"
-                value="repeat"
+              <input type="radio" name="borrowerType" value="repeat"
                 checked={layer1Data.borrowerType === 'repeat'}
-                onChange={(e) => setLayer1Data({...layer1Data, borrowerType: e.target.value})}
-              />
+                onChange={(e) => setLayer1Data({...layer1Data, borrowerType: e.target.value})} />
               <span>No, I've taken loans before</span>
             </label>
           </div>
@@ -441,23 +524,15 @@ const handleLayer2Submit = () => {
           <label>Any missed EMI payments in last 12 months?</label>
           <div className="radio-group">
             <label className="radio-option">
-              <input
-                type="radio"
-                name="missed12m"
-                value="no"
+              <input type="radio" name="missed12m" value="no"
                 checked={layer1Data.missedPayments12m === 'no'}
-                onChange={(e) => setLayer1Data({...layer1Data, missedPayments12m: e.target.value})}
-              />
+                onChange={(e) => setLayer1Data({...layer1Data, missedPayments12m: e.target.value})} />
               <span>No</span>
             </label>
             <label className="radio-option">
-              <input
-                type="radio"
-                name="missed12m"
-                value="yes"
+              <input type="radio" name="missed12m" value="yes"
                 checked={layer1Data.missedPayments12m === 'yes'}
-                onChange={(e) => setLayer1Data({...layer1Data, missedPayments12m: e.target.value})}
-              />
+                onChange={(e) => setLayer1Data({...layer1Data, missedPayments12m: e.target.value})} />
               <span>Yes</span>
             </label>
           </div>
@@ -467,23 +542,15 @@ const handleLayer2Submit = () => {
           <label>Any missed EMI payments in last 5 years?</label>
           <div className="radio-group">
             <label className="radio-option">
-              <input
-                type="radio"
-                name="missed5y"
-                value="no"
+              <input type="radio" name="missed5y" value="no"
                 checked={layer1Data.missedPayments5y === 'no'}
-                onChange={(e) => setLayer1Data({...layer1Data, missedPayments5y: e.target.value})}
-              />
+                onChange={(e) => setLayer1Data({...layer1Data, missedPayments5y: e.target.value})} />
               <span>No</span>
             </label>
             <label className="radio-option">
-              <input
-                type="radio"
-                name="missed5y"
-                value="yes"
+              <input type="radio" name="missed5y" value="yes"
                 checked={layer1Data.missedPayments5y === 'yes'}
-                onChange={(e) => setLayer1Data({...layer1Data, missedPayments5y: e.target.value})}
-              />
+                onChange={(e) => setLayer1Data({...layer1Data, missedPayments5y: e.target.value})} />
               <span>Yes</span>
             </label>
           </div>
@@ -491,11 +558,9 @@ const handleLayer2Submit = () => {
 
         <div className="input-group">
           <label>Approximate CIBIL Score</label>
-          <select
-            value={layer1Data.cibilRange}
+          <select value={layer1Data.cibilRange}
             onChange={(e) => setLayer1Data({...layer1Data, cibilRange: e.target.value})}
-            className="select-input"
-          >
+            className="select-input">
             <option value="">Select range</option>
             <option value="750+">750+ (Excellent)</option>
             <option value="700-749">700-749 (Good)</option>
@@ -922,7 +987,7 @@ const renderPropertyInsights = () => {
                       </div>
                       <div className="detail-row">
                         <span>Upfront Costs</span>
-                        <strong>₹{(match.totalUpfront / 1000).toFixed(1)}K</strong>
+                        <strong style={{fontSize:"12px", color:"#64748b"}}>{match.totalUpfront}</strong>
                       </div>
                     </div>
 
@@ -987,7 +1052,7 @@ const renderPropertyInsights = () => {
                       </div>
                       <div className="detail-row">
                         <span>Upfront Costs</span>
-                        <strong>₹{(match.totalUpfront / 1000).toFixed(1)}K</strong>
+                        <strong style={{fontSize:"12px", color:"#64748b"}}>{match.totalUpfront}</strong>
                       </div>
                     </div>
 
@@ -1052,7 +1117,7 @@ const renderPropertyInsights = () => {
                       </div>
                       <div className="detail-row">
                         <span>Upfront Costs</span>
-                        <strong>₹{(match.totalUpfront / 1000).toFixed(1)}K</strong>
+                        <strong style={{fontSize:"12px", color:"#64748b"}}>{match.totalUpfront}</strong>
                       </div>
                     </div>
 
@@ -1068,6 +1133,195 @@ const renderPropertyInsights = () => {
               </div>
             </div>
           )}
+        </div>
+
+        {/* AMORTIZATION CHART */}
+        {results && results.finalEligibleAmount > 0 && (() => {
+          const bestMatch = results.matches[0];
+          const rate = bestMatch ? bestMatch.interestRate : 8.5;
+          const tenure = parseInt(layer1Data.loanTenure || 20);
+          const principal = results.finalEligibleAmount;
+          const monthlyRate = rate / 12 / 100;
+          const tenureMonths = tenure * 12;
+          const emi = principal * (monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) / (Math.pow(1 + monthlyRate, tenureMonths) - 1);
+
+          // Build yearly amortization data
+          let balance = principal;
+          const yearlyData = [];
+          for (let year = 1; year <= tenure; year++) {
+            let yearPrincipal = 0, yearInterest = 0;
+            for (let m = 0; m < 12; m++) {
+              const interest = balance * monthlyRate;
+              const princ = emi - interest;
+              yearInterest += interest;
+              yearPrincipal += princ;
+              balance -= princ;
+            }
+            yearlyData.push({ year, principal: Math.round(yearPrincipal), interest: Math.round(yearInterest), balance: Math.max(0, Math.round(balance)) });
+          }
+          const totalInterest = yearlyData.reduce((s, d) => s + d.interest, 0);
+          const totalPayment = principal + totalInterest;
+          const maxBar = Math.max(...yearlyData.map(d => d.principal + d.interest));
+
+          return (
+            <div className="amort-section">
+              <h2>📊 Free Amortization Schedule</h2>
+              <p className="amort-subtitle">Based on {rate}% p.a. over {tenure} years (using {bestMatch?.shortName || 'best matched'} rate)</p>
+
+              <div className="amort-summary">
+                <div className="amort-stat">
+                  <span>Loan Amount</span>
+                  <strong>₹{(principal/100000).toFixed(1)}L</strong>
+                </div>
+                <div className="amort-stat">
+                  <span>Monthly EMI</span>
+                  <strong>₹{Math.round(emi).toLocaleString()}</strong>
+                </div>
+                <div className="amort-stat">
+                  <span>Total Interest</span>
+                  <strong style={{color:'#ef4444'}}>₹{(totalInterest/100000).toFixed(1)}L</strong>
+                </div>
+                <div className="amort-stat">
+                  <span>Total Payment</span>
+                  <strong>₹{(totalPayment/100000).toFixed(1)}L</strong>
+                </div>
+              </div>
+
+              <div className="amort-chart">
+                <div className="chart-labels">
+                  <span className="label-principal">■ Principal</span>
+                  <span className="label-interest">■ Interest</span>
+                </div>
+                <div className="chart-bars">
+                  {yearlyData.filter((_, i) => i % Math.ceil(tenure/15) === 0 || i === tenure - 1).map(d => (
+                    <div key={d.year} className="bar-group">
+                      <div className="bar-stack">
+                        <div className="bar-interest" style={{height: `${(d.interest/maxBar)*140}px`}} title={`Interest: ₹${(d.interest/1000).toFixed(0)}K`}></div>
+                        <div className="bar-principal" style={{height: `${(d.principal/maxBar)*140}px`}} title={`Principal: ₹${(d.principal/1000).toFixed(0)}K`}></div>
+                      </div>
+                      <span className="bar-year">Yr{d.year}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="amort-insight">
+                💡 <strong>Key Insight:</strong> In the first 5 years, ~{Math.round((yearlyData.slice(0,5).reduce((s,d)=>s+d.interest,0) / yearlyData.slice(0,5).reduce((s,d)=>s+d.principal+d.interest,0))*100)}% of your EMI goes to interest. <strong>Prepaying early saves the most!</strong>
+              </div>
+
+              <details className="amort-table-details">
+                <summary>View Full Year-by-Year Schedule</summary>
+                <div className="amort-table-wrap">
+                  <table className="amort-table">
+                    <thead>
+                      <tr><th>Year</th><th>Principal Paid</th><th>Interest Paid</th><th>Balance</th></tr>
+                    </thead>
+                    <tbody>
+                      {yearlyData.map(d => (
+                        <tr key={d.year}>
+                          <td>{d.year}</td>
+                          <td>₹{(d.principal/1000).toFixed(1)}K</td>
+                          <td>₹{(d.interest/1000).toFixed(1)}K</td>
+                          <td>₹{(d.balance/100000).toFixed(2)}L</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </details>
+            </div>
+          );
+        })()}
+
+        {/* RBI GUIDELINES EDUCATION */}
+        <div className="rbi-section">
+          <h2>📜 Know Your Rights — RBI Guidelines</h2>
+          <p className="rbi-subtitle">What every home buyer must know before signing</p>
+
+          <div className="rbi-grid">
+            <div className="rbi-card">
+              <div className="rbi-icon">🔒</div>
+              <h4>LTV Ratios (Your Protection)</h4>
+              <p>RBI mandates banks cannot lend beyond:</p>
+              <ul className="rbi-list">
+                <li><strong>Up to ₹30L property:</strong> Max 90% LTV</li>
+                <li><strong>₹30L–₹75L property:</strong> Max 80% LTV</li>
+                <li><strong>Above ₹75L property:</strong> Max 75% LTV</li>
+                <li><strong>LAP:</strong> Max 60-70% LTV</li>
+              </ul>
+              <span className="rbi-note">This protects you from over-borrowing</span>
+            </div>
+
+            <div className="rbi-card">
+              <div className="rbi-icon">💳</div>
+              <h4>Key Fact Statement (KFS)</h4>
+              <p>RBI mandates ALL banks must provide you a KFS before loan disbursal showing:</p>
+              <ul className="rbi-list">
+                <li>✓ Annual Percentage Rate (APR)</li>
+                <li>✓ All fees & charges upfront</li>
+                <li>✓ Total cost of the loan</li>
+                <li>✓ No hidden surprises</li>
+              </ul>
+              <span className="rbi-note">Demand this document — it's your RIGHT</span>
+            </div>
+
+            <div className="rbi-card">
+              <div className="rbi-icon">💰</div>
+              <h4>Prepayment Rules</h4>
+              <p>As per RBI Fair Practice Code:</p>
+              <ul className="rbi-list">
+                <li>✓ <strong>Floating rate loans:</strong> Zero prepayment penalty (RBI circular)</li>
+                <li>✓ Fixed rate loans: Max 2% penalty</li>
+                <li>✓ Banks CANNOT refuse part-prepayment</li>
+                <li>✓ You can switch bank (balance transfer) anytime</li>
+              </ul>
+              <span className="rbi-note">Pay extra EMIs whenever you can — saves lakhs!</span>
+            </div>
+
+            <div className="rbi-card">
+              <div className="rbi-icon">📊</div>
+              <h4>Interest Rate Transparency</h4>
+              <p>What banks must tell you:</p>
+              <ul className="rbi-list">
+                <li>✓ Whether rate is MCLR/RLLR-linked or fixed</li>
+                <li>✓ Reset frequency (quarterly/annually)</li>
+                <li>✓ Spread over benchmark rate</li>
+                <li>✓ When RBI cuts rates, your EMI should reduce</li>
+              </ul>
+              <span className="rbi-note">Ask: "Is this floating or fixed?" before signing</span>
+            </div>
+
+            <div className="rbi-card">
+              <div className="rbi-icon">⚖️</div>
+              <h4>Fair Practice Code</h4>
+              <p>RBI mandates banks MUST:</p>
+              <ul className="rbi-list">
+                <li>✓ Give you a written rejection reason</li>
+                <li>✓ Not charge penal interest without policy</li>
+                <li>✓ Provide a loan account statement anytime</li>
+                <li>✓ Return original documents within 30 days of closure</li>
+              </ul>
+              <span className="rbi-note">If violated, complain at RBI Ombudsman</span>
+            </div>
+
+            <div className="rbi-card">
+              <div className="rbi-icon">🏗️</div>
+              <h4>Property & Legal Safeguards</h4>
+              <p>RBI directs banks to ensure:</p>
+              <ul className="rbi-list">
+                <li>✓ Loan only for RERA-approved projects</li>
+                <li>✓ Sanctioned plan copy mandatory</li>
+                <li>✓ No loan for unauthorized constructions</li>
+                <li>✓ Architect must certify construction stages</li>
+              </ul>
+              <span className="rbi-note">Always ask for RERA registration number</span>
+            </div>
+          </div>
+
+          <div className="rbi-footer">
+            <p>📌 Source: RBI Master Circular on Finance for Housing Schemes</p>
+            <p>For grievances: <strong>RBI Banking Ombudsman — bankingombudsman.rbi.org.in</strong></p>
+          </div>
         </div>
 
         <div className="cta-section">
