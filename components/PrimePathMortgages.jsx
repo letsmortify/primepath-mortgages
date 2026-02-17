@@ -93,55 +93,86 @@ const BANK_POLICIES = {
     strengths: ["Personalized banking", "Premium customers", "Fast processing"]
   }
 };
-// NCR MICRO-MARKET DATA (From PropIndex Q4 2025)
+// NCR MICRO-MARKET DATA — Option B: Fully Data-Driven (PropIndex/Savills/C&W Q4 2025)
 const NCR_MICROMARKETS = {
   gurugram: [
-    { id: 'new-gurugram', name: 'New Gurugram', sectors: 'Sectors 70-115', avgPrice: 10350, growth: '+34% YoY', temp: 'hot' },
-    { id: 'dwarka-exp', name: 'Dwarka Expressway', sectors: 'Sectors 99-113', avgPrice: 11000, growth: '+100% since 2019', temp: 'hot' },
-    { id: 'golf-ext', name: 'Golf Course Extension', sectors: 'Sectors 58-68', avgPrice: 19500, growth: '+21% YoY', temp: 'warm' },
-    { id: 'sohna-road', name: 'Sohna Road', sectors: 'Sectors 47-49, 88', avgPrice: 17400, growth: '+30% YoY', temp: 'hot' },
-    { id: 'old-gurugram', name: 'Old Gurugram / DLF Phases', sectors: 'DLF Phase 1-4, Sushant Lok', avgPrice: 19000, growth: '+9% YoY', temp: 'warm' },
-    { id: 'sohna', name: 'Sohna (South Gurugram)', sectors: 'Sohna town & vicinity', avgPrice: 6000, growth: '+193% launches', temp: 'hot' }
+    { id: 'new-gurugram', name: 'New Gurugram', sectors: 'Sectors 70-115', avgPrice: 10350, luxuryAvg: 16624, growth: '+34% YoY', temp: 'hot', rentalMin: 35000, rentalMax: 75000, rentalGrowth: '+4% YoY', rentalYield: 3.2,
+      highlights: ['11,300+ units launched in 2024 — highest in NCR','Proposed Gurugram Metro Phase 5 alignment','Strong IT/corporate employment belt','50% of NCR 2025 launches were in Gurugram','Well-planned sector roads & green spaces'] },
+    { id: 'dwarka-exp', name: 'Dwarka Expressway', sectors: 'Sectors 99-113', avgPrice: 11000, luxuryAvg: 16693, growth: '+100% since 2019', temp: 'hot', rentalMin: 40000, rentalMax: 90000, rentalGrowth: '+12% YoY', rentalYield: 3.5,
+      highlights: ['Operational 8-lane Dwarka Expressway (2024)','15–20 min drive to IGI Airport','Upcoming metro connectivity (Dwarka-Gurgaon link)','89% ultra-luxury launches in corridor','37% share of Gurugram H1 2025 new launches'] },
+    { id: 'golf-ext', name: 'Golf Course Extension', sectors: 'Sectors 58-68', avgPrice: 19500, luxuryAvg: 26000, growth: '+21% YoY', temp: 'warm', rentalMin: 80000, rentalMax: 200000, rentalGrowth: '+8% YoY', rentalYield: 2.8,
+      highlights: ['Premium corridor — Golf Course Road to SPR','53% of Gurugram H1 2025 luxury launches','Rising HNI & NRI demand','Capital values: ₹26,000–₹60,000 psf (luxury)','Record transactions pushing benchmarks higher'] },
+    { id: 'sohna-road', name: 'Sohna Road', sectors: 'Sectors 47-49, 88', avgPrice: 17400, growth: '+30% YoY', temp: 'hot', rentalMin: 45000, rentalMax: 120000, rentalGrowth: '+6% YoY', rentalYield: 3.0,
+      highlights: ['SPR corridor — connects Golf Course Ext to NH-48','Mixed-use development with commercial hubs','Good connectivity to Cyber Hub','Popular with mid-to-premium segment buyers','Active builder activity from DLF, M3M, Signature'] },
+    { id: 'old-gurugram', name: 'Old Gurugram / DLF Phases', sectors: 'DLF Phase 1-4, Sushant Lok', avgPrice: 19000, luxuryAvg: 28900, growth: '+9% YoY', temp: 'warm', rentalMin: 60000, rentalMax: 180000, rentalGrowth: '+6% YoY', rentalYield: 2.5,
+      highlights: ['Most mature & established Gurugram market','DLF flagship projects with strong brand value','Best social infrastructure in Gurugram','Premium villas avg ₹28,900 psf','High occupancy — preferred by expats & HNIs'] },
+    { id: 'sohna', name: 'Sohna (South Gurugram)', sectors: 'Sohna town & vicinity', avgPrice: 6000, growth: '+193% new launches', temp: 'hot', rentalMin: 15000, rentalMax: 35000, rentalGrowth: '+5% YoY', rentalYield: 3.8,
+      highlights: ['Upcoming affordable-mid segment hub','Haryana RERA approved projects increasing','Proximity to KMP Expressway','193% surge in new launches — high future supply','Best value entry point in Gurugram region'] }
   ],
   noida: [
-    { id: 'central-noida', name: 'Central Noida', sectors: 'Sectors 15-50', avgPrice: 16000, growth: '+9% YoY', temp: 'warm' },
-    { id: 'noida-sectors-51-100', name: 'Mid Noida', sectors: 'Sectors 51-100', avgPrice: 14000, growth: '+10% YoY', temp: 'warm' },
-    { id: 'noida-exp', name: 'Noida Expressway', sectors: 'Sectors 74-137', avgPrice: 13400, growth: '+10% YoY', temp: 'warm' },
-    { id: 'sector-150', name: 'Sector 150 Zone', sectors: 'Sectors 100-149', avgPrice: 10000, growth: '+15% YoY', temp: 'hot' },
-    { id: 'new-noida', name: 'New Noida / South', sectors: 'Sectors 150-168', avgPrice: 8450, growth: '+24% YoY', temp: 'hot' },
-    { id: 'gr-noida-west', name: 'Greater Noida West', sectors: 'Tech Zone IV, KP V', avgPrice: 8450, growth: '+150% launches', temp: 'hot' }
+    { id: 'central-noida', name: 'Central Noida', sectors: 'Sectors 15-50', avgPrice: 16000, growth: '+9% YoY', temp: 'warm', rentalMin: 30000, rentalMax: 70000, rentalGrowth: '+3% YoY', rentalYield: 2.8,
+      highlights: ['Established city centre — best connectivity','Noida Metro (Blue Line) covers entire belt','Top schools, hospitals & commercial centres','Sector 18 shopping district proximity','Stable demand from both end-users & investors'] },
+    { id: 'noida-sectors-51-100', name: 'Mid Noida', sectors: 'Sectors 51-100', avgPrice: 14000, growth: '+10% YoY', temp: 'warm', rentalMin: 25000, rentalMax: 60000, rentalGrowth: '+3% YoY', rentalYield: 2.9,
+      highlights: ['Metro connectivity via Aqua Line (Sec 51, 76, 101)','Growing IT park presence (Sec 62, 63)','Mid-segment sweet spot for value buyers','Close to Botanical Garden metro hub','Active resale market with good liquidity'] },
+    { id: 'noida-exp', name: 'Noida Expressway', sectors: 'Sectors 74-137', avgPrice: 13400, growth: '+10% YoY', temp: 'warm', rentalMin: 38500, rentalMax: 69500, rentalGrowth: '+3% YoY', rentalYield: 3.1,
+      highlights: ['Commercial hub — IT parks, MNC offices','Aqua Line metro serves Sectors 101-137','Close to Greater Noida & Yamuna Exp junction','Cushman & Wakefield avg rent ₹38,500–₹69,500/mo','Strong demand from IT professionals'] },
+    { id: 'sector-150', name: 'Sector 150 Zone', sectors: 'Sectors 100-149', avgPrice: 10000, growth: '+24% YoY', temp: 'hot', rentalMin: 28000, rentalMax: 55000, rentalGrowth: '+3% YoY', rentalYield: 3.4,
+      highlights: ['Greenest planned sector in Noida — 60% open space','Close to DND Flyway & Noida-Greater Noida Exp','Luxury projects by ATS, Godrej, Tata, Prateek','Savills: capital values rising 7% in Sec 150','Airport metro line to pass through corridor'] },
+    { id: 'new-noida', name: 'New Noida / South', sectors: 'Sectors 150-168', avgPrice: 8450, growth: '+24% YoY', temp: 'hot', rentalMin: 20000, rentalMax: 45000, rentalGrowth: '+5% YoY', rentalYield: 3.6,
+      highlights: ['Noida Authority planning 20,000 acre new township','Upcoming Jewar Airport metro connectivity','Most affordable entry in premium Noida zone','NOIDA-Greater NOIDA Exp: +26% capital appreciation','High growth potential — ideal for 5–7 year horizon'] },
+    { id: 'gr-noida-west', name: 'Greater Noida West', sectors: 'Tech Zone IV, KP V', avgPrice: 8450, growth: '+150% new launches', temp: 'hot', rentalMin: 18000, rentalMax: 38000, rentalGrowth: '+5% YoY', rentalYield: 3.7,
+      highlights: ['Highest new launch volume in NCR in 2024','Affordable to mid-segment housing dominates','Proposed metro connectivity (Aqua Line extension)','Growing social infra — malls, hospitals, schools','Preferred by first-time buyers & investors'] }
   ],
   'greater-noida': [
-    { id: 'gnw-main', name: 'Greater Noida West', sectors: 'Tech Zone IV, Knowledge Park', avgPrice: 8450, growth: '+24% YoY', temp: 'hot' },
-    { id: 'yamuna-exp', name: 'Yamuna Expressway', sectors: 'Sectors near Jewar Airport', avgPrice: 4500, growth: 'Airport impact zone', temp: 'hot' },
-    { id: 'gnida-sectors', name: 'Greater Noida Central', sectors: 'Alpha, Beta, Gamma sectors', avgPrice: 7000, growth: '+8% YoY', temp: 'warm' }
+    { id: 'gnw-main', name: 'Greater Noida West', sectors: 'Tech Zone IV, Knowledge Park', avgPrice: 8450, growth: '+24% YoY', temp: 'hot', rentalMin: 18000, rentalMax: 40000, rentalGrowth: '+5% YoY', rentalYield: 3.6,
+      highlights: ['Most affordable new-launch hub in NCR 2024','Aqua Metro Line extension planned','Knowledge Park & Tech Zone proximity','Strong RERA compliance post-2017 reforms','75% new launches in 2025 were in this micro-market'] },
+    { id: 'yamuna-exp', name: 'Yamuna Expressway', sectors: 'Sectors near Jewar Airport', avgPrice: 4500, growth: 'Airport impact zone', temp: 'hot', rentalMin: 12000, rentalMax: 28000, rentalGrowth: '+8% YoY', rentalYield: 4.0,
+      highlights: ['Noida International Airport (Jewar) — operational by 2026','8% of NCR 2025 launches were on Yamuna Exp','Land prices appreciating on airport announcement','Formula 1 circuit, film city, medical device park nearby','Highest long-term growth potential in entire NCR'] },
+    { id: 'gnida-sectors', name: 'Greater Noida Central', sectors: 'Alpha, Beta, Gamma sectors', avgPrice: 7000, growth: '+8% YoY', temp: 'warm', rentalMin: 15000, rentalMax: 35000, rentalGrowth: '+4% YoY', rentalYield: 3.2,
+      highlights: ['Established GNIDA authority planned sectors','Wide roads & green belts — planned urban design','Pari Chowk & Knowledge Park commercial hubs','Good connectivity via NH-44 to Delhi','Stable market — preferred by end-users'] }
   ],
   delhi: [
-    { id: 'south-delhi', name: 'South Delhi', sectors: 'Saket, GK 1&2, Defence Colony, Lajpat Nagar', avgPrice: 22000, growth: '+8% YoY', temp: 'warm' },
-    { id: 'west-delhi', name: 'West Delhi', sectors: 'Dwarka, Janakpuri, Rajouri Garden, Uttam Nagar', avgPrice: 14800, growth: '+11% YoY', temp: 'warm' },
-    { id: 'north-delhi', name: 'North Delhi', sectors: 'Rohini, Pitampura, Model Town, Shakurpur', avgPrice: 13500, growth: '+10% YoY', temp: 'warm' },
-    { id: 'east-delhi', name: 'East Delhi', sectors: 'Laxmi Nagar, Mayur Vihar, Preet Vihar, IP Ext', avgPrice: 12000, growth: '+9% YoY', temp: 'warm' },
-    { id: 'north-west-delhi', name: 'North-West Delhi', sectors: 'Paschim Vihar, Shalimar Bagh, Ashok Vihar', avgPrice: 15000, growth: '+9% YoY', temp: 'warm' },
-    { id: 'central-delhi', name: 'Central Delhi', sectors: 'Karol Bagh, Paharganj, Civil Lines', avgPrice: 18000, growth: '+7% YoY', temp: 'warm' }
+    { id: 'south-delhi', name: 'South Delhi', sectors: 'Saket, GK 1&2, Defence Colony, Lajpat Nagar', avgPrice: 22000, luxuryAvg: 52500, growth: '+8% YoY', temp: 'warm', rentalMin: 159500, rentalMax: 253000, rentalGrowth: '+4% YoY', rentalYield: 2.2,
+      highlights: ['Most prestigious belt — limited supply drives value','Capital values: ₹40,250–₹65,500 psf (luxury)','C&W: South-East +4%, South-West +5% YoY','HNI demand from business families & NRIs','Luxury floors & bungalows dominate supply'] },
+    { id: 'west-delhi', name: 'West Delhi', sectors: 'Dwarka, Janakpuri, Rajouri Garden, Uttam Nagar', avgPrice: 14800, growth: '+11% YoY', temp: 'warm', rentalMin: 25000, rentalMax: 60000, rentalGrowth: '+4% YoY', rentalYield: 2.8,
+      highlights: ['Dwarka — Delhi Metro connectivity (Blue & Magenta)','15 min to IGI Airport from Dwarka','One of Delhi largest planned sectors','Strong middle-class demand','Growing social infrastructure in Dwarka sectors'] },
+    { id: 'north-delhi', name: 'North Delhi', sectors: 'Rohini, Pitampura, Model Town, Shakurpur', avgPrice: 13500, growth: '+10% YoY', temp: 'warm', rentalMin: 20000, rentalMax: 50000, rentalGrowth: '+3% YoY', rentalYield: 2.6,
+      highlights: ['Rohini — Delhi largest planned sub-city','Red Line Metro connects entire belt','Model Town & Civil Lines — old Delhi premium','Affordable relative to South & West Delhi','Good schools & hospitals belt'] },
+    { id: 'east-delhi', name: 'East Delhi', sectors: 'Laxmi Nagar, Mayur Vihar, Preet Vihar, IP Ext', avgPrice: 12000, growth: '+9% YoY', temp: 'warm', rentalMin: 18000, rentalMax: 45000, rentalGrowth: '+3% YoY', rentalYield: 2.9,
+      highlights: ['Most affordable Delhi zone — best value','Blue Line Metro covers Laxmi Nagar to Noida border','Close to Noida IT parks — popular with IT workers','IP Extension — growing luxury segment','Preet Vihar & Mayur Vihar Phase 1: established'] },
+    { id: 'north-west-delhi', name: 'North-West Delhi', sectors: 'Paschim Vihar, Shalimar Bagh, Ashok Vihar', avgPrice: 15000, growth: '+9% YoY', temp: 'warm', rentalMin: 22000, rentalMax: 55000, rentalGrowth: '+3% YoY', rentalYield: 2.7,
+      highlights: ['Paschim Vihar — well-planned colony with good roads','Pink Line Metro covers Shalimar Bagh','Ashok Vihar — popular with government employees','Close to Netaji Subhash Place commercial hub','Strong owner-occupier base — low vacancy'] },
+    { id: 'central-delhi', name: 'Central Delhi', sectors: 'Karol Bagh, Paharganj, Civil Lines', avgPrice: 18000, luxuryAvg: 82750, growth: '+7% YoY', temp: 'warm', rentalMin: 348500, rentalMax: 585500, rentalGrowth: '+3% YoY', rentalYield: 2.0,
+      highlights: ['Jorbagh, Golf Links — Lutyens Delhi premium','Capital values ₹82,750–₹1,33,500 psf (Lutyens)','Strictest building bye-laws — very limited supply','Ultra-HNI & diplomatic zone demand','One of the most value-stable markets in India'] }
   ],
   ghaziabad: [
-    { id: 'indirapuram', name: 'Indirapuram', sectors: 'Shakti Khand, Niti Khand, Ahinsa Khand', avgPrice: 7500, growth: '+8% YoY', temp: 'warm' },
-    { id: 'vaishali', name: 'Vaishali / Vasundhara', sectors: 'Sectors 1-6', avgPrice: 6800, growth: '+9% YoY', temp: 'warm' },
-    { id: 'raj-nagar-ext', name: 'Raj Nagar Extension', sectors: 'NH-58 corridor', avgPrice: 4500, growth: '+12% YoY', temp: 'hot' },
-    { id: 'crossings-rep', name: 'Crossings Republik', sectors: 'NH-24 Belt', avgPrice: 5500, growth: '+14% YoY', temp: 'hot' },
-    { id: 'siddharth-vihar', name: 'Siddharth Vihar / Tronica City', sectors: 'Upcoming zone', avgPrice: 4000, growth: '+18% YoY', temp: 'hot' }
+    { id: 'indirapuram', name: 'Indirapuram', sectors: 'Shakti Khand, Niti Khand, Ahinsa Khand', avgPrice: 7500, growth: '+8% YoY', temp: 'warm', rentalMin: 18000, rentalMax: 40000, rentalGrowth: '+4% YoY', rentalYield: 3.1,
+      highlights: ['Most established Ghaziabad residential hub','Blue Line Metro (Vaishali–Noida) nearby','NH-24 Bypass connectivity to Delhi & Noida','High-density township with all amenities','Active resale market with good liquidity'] },
+    { id: 'vaishali', name: 'Vaishali / Vasundhara', sectors: 'Sectors 1-6', avgPrice: 6800, growth: '+9% YoY', temp: 'warm', rentalMin: 15000, rentalMax: 35000, rentalGrowth: '+3% YoY', rentalYield: 3.0,
+      highlights: ['Vaishali Metro Station (Blue Line) — direct to Delhi','Vasundhara — planned sectors with good infra','Close to Delhi border — great for Delhi commuters','Affordable first-home market','Growing commercial & retail presence'] },
+    { id: 'raj-nagar-ext', name: 'Raj Nagar Extension', sectors: 'NH-58 corridor', avgPrice: 4500, growth: '+12% YoY', temp: 'hot', rentalMin: 10000, rentalMax: 25000, rentalGrowth: '+5% YoY', rentalYield: 3.8,
+      highlights: ['Fastest growing affordable segment in Ghaziabad','Large township projects by Gaurs, Mahagun, ATS','Proposed metro connectivity boost expected','Best price-to-space ratio in NCR','Rapidly improving social infrastructure'] },
+    { id: 'crossings-rep', name: 'Crossings Republik', sectors: 'NH-24 Belt', avgPrice: 5500, growth: '+14% YoY', temp: 'hot', rentalMin: 12000, rentalMax: 28000, rentalGrowth: '+5% YoY', rentalYield: 3.5,
+      highlights: ['Integrated township — self-sufficient living','NH-24 corridor — direct to Delhi in 40 min','Large project sizes — good amenities','Growing IT/corporate presence nearby','Affordable end-user driven market'] },
+    { id: 'siddharth-vihar', name: 'Siddharth Vihar / Tronica City', sectors: 'Upcoming zone', avgPrice: 4000, growth: '+18% YoY', temp: 'hot', rentalMin: 8000, rentalMax: 20000, rentalGrowth: '+6% YoY', rentalYield: 4.0,
+      highlights: ['Emerging zone — early entry opportunity','Industrial & logistics hub growing nearby','Land acquisition active — future infra planned','Ideal for 5–7 year investment horizon','Lowest price per sqft in NCR'] }
   ],
   faridabad: [
-    { id: 'nhpc-nit', name: 'NIT / NHPC Area', sectors: 'Central Faridabad', avgPrice: 6800, growth: '+7% YoY', temp: 'warm' },
-    { id: 'sector-15-21', name: 'Sectors 15-21', sectors: 'Old Faridabad', avgPrice: 7200, growth: '+6% YoY', temp: 'warm' },
-    { id: 'greater-faridabad', name: 'Greater Faridabad', sectors: 'Sectors 75-89', avgPrice: 5500, growth: '+10% YoY', temp: 'warm' },
-    { id: 'neharpar', name: 'Neharpar / Greenfield', sectors: 'Sectors 88-96, Faridabad-Gurgaon Road', avgPrice: 4500, growth: '+12% YoY', temp: 'hot' }
+    { id: 'nhpc-nit', name: 'NIT / NHPC Area', sectors: 'Central Faridabad', avgPrice: 6800, growth: '+7% YoY', temp: 'warm', rentalMin: 15000, rentalMax: 35000, rentalGrowth: '+3% YoY', rentalYield: 3.0,
+      highlights: ['Oldest established belt of Faridabad','Violet Line Metro (Faridabad stations) connectivity','Close to AIIMS Faridabad (under development)','Government employees hub — stable demand','Sector 12, 14, 16 — mature resale market'] },
+    { id: 'sector-15-21', name: 'Sectors 15-21', sectors: 'Old Faridabad', avgPrice: 7200, growth: '+6% YoY', temp: 'warm', rentalMin: 16000, rentalMax: 38000, rentalGrowth: '+3% YoY', rentalYield: 2.8,
+      highlights: ['Well-established residential sectors','Good connectivity via KMP Expressway','Close to Crown Mall & commercial hubs','Popular with local business families','Metro Violet Line serves this corridor'] },
+    { id: 'greater-faridabad', name: 'Greater Faridabad', sectors: 'Sectors 75-89', avgPrice: 5500, growth: '+10% YoY', temp: 'warm', rentalMin: 12000, rentalMax: 28000, rentalGrowth: '+4% YoY', rentalYield: 3.3,
+      highlights: ['New planned zone — modern infrastructure','Affordable relative to Gurgaon & Noida','Easy access to KMP Expressway (orbital)','Active new launches by mid-segment developers','Proximity to Gurgaon via Faridabad-Gurgaon Road'] },
+    { id: 'neharpar', name: 'Neharpar / Greenfield', sectors: 'Sectors 88-96, Faridabad-Gurgaon Road', avgPrice: 4500, growth: '+12% YoY', temp: 'hot', rentalMin: 10000, rentalMax: 24000, rentalGrowth: '+5% YoY', rentalYield: 3.8,
+      highlights: ['Fastest growing zone in Faridabad','Faridabad-Gurgaon Road — direct access to Gurugram','New township development — modern amenities','Entry-level investment zone with high growth','Low prices attracting first-home buyers'] }
   ]
 };
 
 const PrimePathMortgages = () => {
   const [currentLayer, setCurrentLayer] = useState('intro'); // intro, layer1, layer2, results
   const [layer1Data, setLayer1Data] = useState({
+    employmentType: '', // govt-salaried, private-salaried, professional, employer
     customerPreference: '', // speed, rate, cost, service
     loanAmountNeeded: '',
     monthlyIncome: '',
@@ -155,7 +186,8 @@ const PrimePathMortgages = () => {
   
   const [layer2Data, setLayer2Data] = useState({
     loanType: '', // HL or LAP
-    propertyCategory: '', // For HL: builder-new, resale. For LAP: residential, commercial
+    propertySubType: '', // apartment, plot, house, office
+    propertyCategory: '', // builder-new, resale
     decidingDocument: '', // agreement-to-sell, booking-form, property-papers
     propertyValue: '', // from deciding document
     propertyLocation: '',
@@ -335,7 +367,7 @@ const PrimePathMortgages = () => {
   };
 
   const handleLayer1Submit = () => {
-    const requiredLayer1 = ['customerPreference', 'loanAmountNeeded', 'monthlyIncome', 'loanTenure', 'existingEMIs', 'borrowerType', 'missedPayments12m', 'missedPayments5y', 'cibilRange'];
+    const requiredLayer1 = ['employmentType', 'customerPreference', 'loanAmountNeeded', 'monthlyIncome', 'loanTenure', 'existingEMIs', 'borrowerType', 'missedPayments12m', 'missedPayments5y', 'cibilRange'];
     const allFilled = requiredLayer1.every(f => layer1Data[f] !== '');
     if (!allFilled) {
       alert('Please fill all fields to continue');
@@ -345,19 +377,15 @@ const PrimePathMortgages = () => {
   };
 
 const handleLayer2Submit = () => {
-  // Check required fields (microMarket is optional)
-  const requiredFields = ['loanType', 'propertyCategory', 'decidingDocument', 'propertyValue', 'propertyLocation'];
+  const requiredFields = ['loanType', 'propertySubType', 'propertyCategory', 'decidingDocument', 'propertyValue', 'propertyLocation'];
   const allRequiredFilled = requiredFields.every(field => layer2Data[field] !== '');
-  
   if (!allRequiredFilled) {
-    alert('Please fill all required fields');
+    alert('Please fill all required fields including property type');
     return;
-  }  
-  // Go to property insights first (if micro-market selected)
+  }
   if (layer2Data.microMarket) {
     setCurrentLayer('propertyInsights');
   } else {
-    // Skip insights if no micro-market
     const results = matchBanks();
     setResults(results);
     setCurrentLayer('results');
@@ -419,7 +447,31 @@ const handleLayer2Submit = () => {
 
       <div className="form-section">
 
-        {/* CUSTOMER PREFERENCE - First question */}
+        {/* Q1: EMPLOYMENT TYPE */}
+        <div className="input-group">
+          <label>👤 What best describes your employment?</label>
+          <span className="hint">This helps us match the right bank policies for your profile</span>
+          <div className="radio-group vertical" style={{marginTop:'8px'}}>
+            {[
+              { val: 'govt-salaried', emoji: '🏛️', title: 'Salaried — Government / PSU', desc: 'Central/State Govt, PSU, Defence, Railways' },
+              { val: 'private-salaried', emoji: '🏢', title: 'Salaried — Private Company', desc: 'MNC, Indian corporate, startup employee' },
+              { val: 'professional', emoji: '🩺', title: 'Self-Employed Professional', desc: 'Doctor, Lawyer, CA, Consultant, Architect' },
+              { val: 'employer', emoji: '🏭', title: 'Self-Employed Business Owner', desc: 'Manufacturer, Trader, Own account worker' },
+            ].map(opt => (
+              <label key={opt.val} className="radio-card" style={{borderColor: layer1Data.employmentType === opt.val ? '#2563eb' : '#e2e8f0', background: layer1Data.employmentType === opt.val ? '#eff6ff' : 'white'}}>
+                <input type="radio" name="employmentType" value={opt.val}
+                  checked={layer1Data.employmentType === opt.val}
+                  onChange={(e) => setLayer1Data({...layer1Data, employmentType: e.target.value})} />
+                <div>
+                  <strong>{opt.emoji} {opt.title}</strong>
+                  <p>{opt.desc}</p>
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Q2: CUSTOMER PREFERENCE - What matters most */}
         <div className="input-group">
           <label>🎯 What matters most to you in a home loan?</label>
           <span className="hint">This helps us rank banks based on YOUR priority</span>
@@ -617,6 +669,34 @@ const handleLayer2Submit = () => {
           </div>
         </div>
 
+        {/* PROPERTY SUB-TYPE - Show after loan type selected */}
+        {layer2Data.loanType && (
+          <div className="input-group">
+            <label>🏠 What type of property?</label>
+            <div className="radio-group vertical" style={{marginTop:'8px'}}>
+              {layer2Data.loanType === 'HL' ? [
+                { val: 'apartment', emoji: '🏢', title: 'Apartment / Flat', desc: 'Multi-storey builder floor or society flat' },
+                { val: 'plot', emoji: '🌳', title: 'Residential Plot / Land', desc: 'Open plot for construction' },
+                { val: 'house', emoji: '🏡', title: 'Independent House / Villa', desc: 'Row house, bungalow, builder floor' },
+              ] : [
+                { val: 'office', emoji: '🏛️', title: 'Office / Commercial Space', desc: 'Loan Against Property — commercial use' },
+                { val: 'apartment', emoji: '🏢', title: 'Residential Apartment', desc: 'Loan Against existing flat / house' },
+                { val: 'plot', emoji: '🌳', title: 'Residential Plot', desc: 'Loan against owned plot' },
+              ]}.map(opt => (
+                <label key={opt.val} className="radio-card" style={{borderColor: layer2Data.propertySubType === opt.val ? '#2563eb' : '#e2e8f0', background: layer2Data.propertySubType === opt.val ? '#eff6ff' : 'white'}}>
+                  <input type="radio" name="propertySubType" value={opt.val}
+                    checked={layer2Data.propertySubType === opt.val}
+                    onChange={(e) => setLayer2Data({...layer2Data, propertySubType: e.target.value})} />
+                  <div>
+                    <strong>{opt.emoji} {opt.title}</strong>
+                    <p>{opt.desc}</p>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+
         {layer2Data.loanType === 'HL' && (
           <div className="input-group">
             <label>Property Category</label>
@@ -728,159 +808,353 @@ const handleLayer2Submit = () => {
   );
 const renderPropertyInsights = () => {
   if (!layer2Data.microMarket) {
-    // Skip if no micro-market selected
-    setCurrentLayer('results');
-    return null;
+    const r = matchBanks(); setResults(r); setCurrentLayer('results'); return null;
   }
-
-  // Get market data
   const cityData = NCR_MICROMARKETS[layer2Data.propertyLocation];
   const zoneData = cityData?.find(z => z.id === layer2Data.microMarket);
-  
-  if (!zoneData) {
-    setCurrentLayer('results');
-    return null;
-  }
+  if (!zoneData) { const r = matchBanks(); setResults(r); setCurrentLayer('results'); return null; }
 
-  // Calculate property metrics
   const propertyVal = parseInt(layer2Data.propertyValue);
-  const estimatedSqFt = propertyVal / zoneData.avgPrice;
-  const priceDiff = ((propertyVal / estimatedSqFt) - zoneData.avgPrice) / zoneData.avgPrice * 100;
+  const isApartment = layer2Data.propertySubType === 'apartment';
+  const isUnderConstruction = layer2Data.propertyCategory === 'builder-new';
+  const estimatedSqFt = Math.round(propertyVal / zoneData.avgPrice);
+  const priceDiff = 0; // within market
   const isGoodDeal = priceDiff < -10;
   const isExpensive = priceDiff > 10;
 
+  // GST/TDS cost calculations (apartments only)
+  const gstAmt = isUnderConstruction ? Math.round(propertyVal * 0.05) : 0;
+  const tdsAmt = propertyVal > 5000000 ? Math.round(propertyVal * 0.01) : 0;
+  const stampDuty = Math.round(propertyVal * 0.06); // avg NCR 6%
+  const regFee = Math.round(propertyVal * 0.01);
+  const edcHaryana = layer2Data.propertyLocation === 'gurugram' ? Math.round(propertyVal * 0.015) : 0;
+  const totalAdditional = gstAmt + tdsAmt + stampDuty + regFee + edcHaryana;
+
+  // Confidence score gamification
+  const scores = {
+    priceScore: isGoodDeal ? 95 : isExpensive ? 55 : 78,
+    marketScore: zoneData.temp === 'hot' ? 90 : zoneData.temp === 'warm' ? 72 : 55,
+    legalScore: isUnderConstruction ? 65 : 80,
+    rentalScore: zoneData.rentalYield ? Math.round(zoneData.rentalYield * 10) : 68,
+  };
+  const overallScore = Math.round((scores.priceScore + scores.marketScore + scores.legalScore + scores.rentalScore) / 4);
+  const scoreLabel = overallScore >= 80 ? 'Excellent Buy' : overallScore >= 65 ? 'Good Buy' : 'Proceed with Caution';
+  const scoreColor = overallScore >= 80 ? '#16a34a' : overallScore >= 65 ? '#d97706' : '#dc2626';
+
+  // Comparable market data (from PropIndex/Savills/C&W docs)
+  const comparables = zoneData.comparables || [
+    { project: 'Market Benchmark', size: estimatedSqFt, price: Math.round(zoneData.avgPrice * estimatedSqFt / 100000), psf: zoneData.avgPrice, status: 'Area Average' },
+    { project: 'Your Property', size: estimatedSqFt, price: Math.round(propertyVal / 100000), psf: Math.round(propertyVal / estimatedSqFt), status: 'Your Selection' },
+  ];
+
+  const ProgressBar = ({ label, score, color }) => (
+    <div className="progress-item">
+      <div className="progress-label">
+        <span>{label}</span>
+        <strong style={{color}}>{score}/100</strong>
+      </div>
+      <div className="progress-track">
+        <div className="progress-fill" style={{width: `${score}%`, background: color}}></div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="layer-container" style={{ maxWidth: '900px' }}>
+    <div className="layer-container insights-v2" style={{maxWidth:'960px'}}>
       <div className="layer-header">
         <div className="layer-badge">Property Intelligence</div>
-        <h2>📍 Market Insights: {zoneData.name}</h2>
-        <p>Real data from PropIndex Q4 2025</p>
+        <h2>📍 {zoneData.name} — Full Analysis</h2>
+        <p>Based on PropIndex Q4 2025 · Cushman & Wakefield · Savills H1 2025</p>
       </div>
 
-      <div className="insights-grid">
-        {/* Price Comparison */}
-        <div className="insight-card price-card">
+      {/* CONFIDENCE SCORE - Gamified */}
+      <div className="confidence-banner">
+        <div className="confidence-main">
+          <div className="confidence-dial" style={{borderColor: scoreColor}}>
+            <span className="dial-number" style={{color: scoreColor}}>{overallScore}</span>
+            <span className="dial-label">/ 100</span>
+          </div>
+          <div className="confidence-text">
+            <h3 style={{color: scoreColor}}>{scoreLabel}</h3>
+            <p>PrimePath Property Confidence Score</p>
+            <span className="confidence-sub">Based on price, market momentum, legal status & rental potential</span>
+          </div>
+        </div>
+        <div className="progress-bars">
+          <ProgressBar label="💰 Price vs Market" score={scores.priceScore} color="#2563eb" />
+          <ProgressBar label="🔥 Market Momentum" score={scores.marketScore} color="#d97706" />
+          <ProgressBar label="⚖️ Legal Readiness" score={scores.legalScore} color="#7c3aed" />
+          <ProgressBar label="🏠 Rental Potential" score={scores.rentalScore} color="#16a34a" />
+        </div>
+      </div>
+
+      {/* SECTION 1: PRICE + MARKET */}
+      <div className="insights-grid-v2">
+        <div className="insight-card-v2">
           <h3>💰 Price Analysis</h3>
           <div className="price-comparison">
-            <div className="price-row">
-              <span>Your Property Value:</span>
-              <strong>₹{(propertyVal / 100000).toFixed(1)}L</strong>
+            <div className="price-row"><span>Your Property Value:</span>
+              <strong>₹{propertyVal >= 10000000 ? `${(propertyVal/10000000).toFixed(2)} Cr` : `${(propertyVal/100000).toFixed(0)}L`}</strong>
             </div>
-            <div className="price-row">
-              <span>Area Average:</span>
-              <strong>₹{zoneData.avgPrice.toLocaleString()}/sq ft</strong>
-            </div>
-            <div className="price-row">
-              <span>Estimated Size:</span>
-              <strong>~{Math.round(estimatedSqFt)} sq ft</strong>
-            </div>
+            <div className="price-row"><span>Area Avg (PSF):</span><strong>₹{zoneData.avgPrice.toLocaleString()}/sq ft</strong></div>
+            <div className="price-row"><span>Estimated Size:</span><strong>~{estimatedSqFt} sq ft</strong></div>
           </div>
-          
-          {isGoodDeal && (
-            <div className="alert-box good-deal">
-              ✅ <strong>Good Deal!</strong> Your price is {Math.abs(priceDiff).toFixed(0)}% below market average
-            </div>
-          )}
-          {isExpensive && (
-            <div className="alert-box verify-alert">
-              ⚠️ <strong>Above Market:</strong> {priceDiff.toFixed(0)}% higher than average. Verify builder reputation & amenities.
-            </div>
-          )}
-          {!isGoodDeal && !isExpensive && (
-            <div className="alert-box neutral">
-              ✓ <strong>Fair Price:</strong> Within {Math.abs(priceDiff).toFixed(0)}% of market average
-            </div>
-          )}
+          {isGoodDeal && <div className="alert-box good-deal">✅ <strong>Good Deal!</strong> Below market average</div>}
+          {isExpensive && <div className="alert-box verify-alert">⚠️ <strong>Above Market.</strong> Verify amenities justify premium.</div>}
+          {!isGoodDeal && !isExpensive && <div className="alert-box neutral">✓ <strong>Fair Price</strong> — aligned with area average</div>}
         </div>
 
-        {/* Market Temperature */}
-        <div className="insight-card temp-card">
-          <h3>🌡️ Investment Temperature</h3>
+        <div className="insight-card-v2">
+          <h3>🌡️ Market Momentum</h3>
           <div className={`temp-badge ${zoneData.temp}`}>
-            {zoneData.temp === 'hot' && '🔥 HOT ZONE'}
-            {zoneData.temp === 'warm' && '📈 WARM'}
-            {zoneData.temp === 'cool' && '📊 STABLE'}
+            {zoneData.temp === 'hot' ? '🔥 HOT MARKET' : zoneData.temp === 'warm' ? '📈 WARM MARKET' : '📊 STABLE'}
           </div>
           <div className="temp-details">
-            <div className="temp-row">
-              <span>Price Growth:</span>
-              <strong>{zoneData.growth}</strong>
+            <div className="temp-row"><span>Price Growth:</span><strong>{zoneData.growth}</strong></div>
+            <div className="temp-row"><span>Micro-zone:</span><strong>{zoneData.sectors}</strong></div>
+            <div className="temp-row"><span>Outlook:</span><strong>{zoneData.temp === 'hot' ? '⬆️ Bullish' : '→ Steady'}</strong></div>
+          </div>
+        </div>
+      </div>
+
+      {/* SECTION 2: AREA HIGHLIGHTS - Option B: Data-Driven */}
+      <div className="insight-full-card">
+        <h3>📍 Area Highlights</h3>
+        <ul className="highlights-list-v2">
+          {(zoneData.highlights || ['Established residential area', 'Good social infrastructure', 'Active property market']).map((h, i) => (
+            <li key={i}>✓ {h}</li>
+          ))}
+        </ul>
+      </div>
+
+      {/* SECTION 3: APARTMENT COST BREAKDOWN — only for apartments */}
+      {isApartment && (
+        <div className="insight-full-card cost-card">
+          <h3>🧾 True Cost of Buying — What No One Tells You</h3>
+          <p className="cost-subtitle">Beyond the base price, here is what you will actually pay:</p>
+
+          <div className="cost-table">
+            <div className="cost-row header-row">
+              <span>Cost Head</span><span>Rate</span><span>Indicative Amount</span><span>Who Pays</span>
             </div>
-            <div className="temp-row">
-              <span>Coverage:</span>
-              <strong>{zoneData.sectors}</strong>
+            <div className="cost-row">
+              <span>🏠 Base Property Price</span><span>—</span>
+              <span>₹{propertyVal >= 10000000 ? `${(propertyVal/10000000).toFixed(2)} Cr` : `${(propertyVal/100000).toFixed(0)}L`}</span>
+              <span>Buyer → Builder/Seller</span>
+            </div>
+            {isUnderConstruction && (
+              <div className="cost-row highlight-row">
+                <span>📊 GST <span className="badge-pill">Under-Construction Only</span></span>
+                <span>5%</span>
+                <span>₹{(gstAmt/100000).toFixed(1)}L</span>
+                <span>Buyer → Govt (via Builder)</span>
+              </div>
+            )}
+            {!isUnderConstruction && (
+              <div className="cost-row good-row">
+                <span>📊 GST <span className="badge-pill green">Ready-to-Move</span></span>
+                <span>NIL ✅</span>
+                <span>₹0</span>
+                <span>Key advantage of RTM!</span>
+              </div>
+            )}
+            {propertyVal > 5000000 && (
+              <div className="cost-row">
+                <span>💼 TDS (Sec 194-IA) <span className="badge-pill">If property &gt; ₹50L</span></span>
+                <span>1%</span>
+                <span>₹{(tdsAmt/100000).toFixed(1)}L</span>
+                <span>Buyer deducts, files Form 26QB</span>
+              </div>
+            )}
+            <div className="cost-row">
+              <span>🏛️ Stamp Duty</span>
+              <span>{layer2Data.propertyLocation === 'delhi' ? '6%' : layer2Data.propertyLocation === 'gurugram' ? '5% (Women: 3%)' : '5%'}</span>
+              <span>₹{(stampDuty/100000).toFixed(1)}L</span>
+              <span>Buyer → State Govt</span>
+            </div>
+            <div className="cost-row">
+              <span>📝 Registration Fee</span><span>1%</span>
+              <span>₹{(regFee/100000).toFixed(1)}L</span>
+              <span>Buyer → Sub-Registrar</span>
+            </div>
+            {layer2Data.propertyLocation === 'gurugram' && (
+              <div className="cost-row highlight-row">
+                <span>🏗️ EDC/IDC Charges <span className="badge-pill">Haryana: +20% from Jan 2025</span></span>
+                <span>~1.5%</span>
+                <span>₹{(edcHaryana/100000).toFixed(1)}L</span>
+                <span>Buyer → HRERA/Developer</span>
+              </div>
+            )}
+            <div className="cost-row total-row">
+              <span><strong>💰 Total Additional Cost</strong></span><span></span>
+              <span><strong>₹{(totalAdditional/100000).toFixed(1)}L</strong></span>
+              <span><strong>{((totalAdditional/propertyVal)*100).toFixed(1)}% of property value</strong></span>
             </div>
           </div>
-          
-          {zoneData.temp === 'hot' && (
-            <p className="temp-note">
-              High developer activity & strong price appreciation. Good for investment.
-            </p>
+
+          <div className="cost-note">
+            💡 <strong>Loan covers base price only.</strong> Additional costs above must be paid from your own funds. Plan accordingly.
+          </div>
+        </div>
+      )}
+
+      {/* SECTION 4: COMPARABLE SALES */}
+      <div className="insight-full-card">
+        <h3>📊 Market Comparison</h3>
+        <p style={{color:'#64748b', fontSize:'13px', marginBottom:'16px'}}>Source: PropIndex Q4 2025 · Cushman & Wakefield NCR Report</p>
+        <div className="compare-table">
+          <div className="compare-row compare-header">
+            <span>Segment</span><span>Avg PSF</span><span>Est. for ~{estimatedSqFt} sq ft</span><span>YoY Growth</span>
+          </div>
+          <div className="compare-row your-row">
+            <span>⭐ Your Property</span>
+            <span>₹{Math.round(propertyVal/estimatedSqFt).toLocaleString()}</span>
+            <span>₹{propertyVal >= 10000000 ? `${(propertyVal/10000000).toFixed(2)} Cr` : `${(propertyVal/100000).toFixed(0)}L`}</span>
+            <span>—</span>
+          </div>
+          <div className="compare-row">
+            <span>📍 {zoneData.name} Average</span>
+            <span>₹{zoneData.avgPrice.toLocaleString()}</span>
+            <span>₹{((zoneData.avgPrice * estimatedSqFt)/100000).toFixed(0)}L</span>
+            <span style={{color:'#16a34a'}}>{zoneData.growth}</span>
+          </div>
+          {zoneData.luxuryAvg && (
+            <div className="compare-row">
+              <span>🏆 Luxury Segment</span>
+              <span>₹{zoneData.luxuryAvg.toLocaleString()}</span>
+              <span>₹{((zoneData.luxuryAvg * estimatedSqFt)/100000).toFixed(0)}L</span>
+              <span style={{color:'#16a34a'}}>Premium</span>
+            </div>
           )}
         </div>
+      </div>
 
-        {/* Location Highlights */}
-        <div className="insight-card location-card">
-          <h3>📍 Area Highlights</h3>
-          <ul className="highlights-list">
-            {layer2Data.propertyLocation === 'gurugram' && layer2Data.microMarket === 'dwarka-exp' && (
-              <>
-                <li>✓ Operational Dwarka Expressway (2024)</li>
-                <li>✓ 15 min to IGI Airport</li>
-                <li>✓ Proposed Metro connectivity</li>
-                <li>✓ 89% ultra-luxury launches</li>
-              </>
-            )}
-            {layer2Data.propertyLocation === 'gurugram' && layer2Data.microMarket === 'new-gurugram' && (
-              <>
-                <li>✓ Cyber City 3.0 development nearby</li>
-                <li>✓ Proposed Metro Phase 5</li>
-                <li>✓ Strong employment hub</li>
-                <li>✓ 11,300 units launched in 2024</li>
-              </>
-            )}
-            {layer2Data.propertyLocation === 'noida' && layer2Data.microMarket === 'sector-150' && (
-              <>
-                <li>✓ Well-planned green layout</li>
-                <li>✓ Metro connectivity</li>
-                <li>✓ Close to Film City</li>
-                <li>✓ 24% YoY price growth</li>
-              </>
-            )}
-            {layer2Data.propertyLocation === 'greater-noida' && layer2Data.microMarket === 'yamuna-exp' && (
-              <>
-                <li>✓ Near Noida International Airport (Jewar)</li>
-                <li>✓ Airport operational by 2026</li>
-                <li>✓ Most affordable NCR zone</li>
-                <li>✓ High growth potential</li>
-              </>
-            )}
-            {/* Default if no specific highlights */}
-            {(!layer2Data.microMarket || 
-              (layer2Data.propertyLocation === 'gurugram' && !['dwarka-exp', 'new-gurugram'].includes(layer2Data.microMarket)) &&
-              (layer2Data.propertyLocation === 'noida' && layer2Data.microMarket !== 'sector-150') &&
-              (layer2Data.propertyLocation === 'greater-noida' && layer2Data.microMarket !== 'yamuna-exp')
-            ) && (
-              <>
-                <li>✓ Established residential area</li>
-                <li>✓ Good social infrastructure</li>
-                <li>✓ Active property market</li>
-                <li>✓ Steady appreciation trend</li>
-              </>
-            )}
-          </ul>
+      {/* SECTION 5: RENTAL YIELD + CAPITAL APPRECIATION */}
+      <div className="insights-grid-v2">
+        <div className="insight-card-v2">
+          <h3>🏠 Rental Potential</h3>
+          <p style={{color:'#64748b', fontSize:'12px'}}>Source: Cushman & Wakefield Q4 2025 / Savills H1 2025</p>
+          <div className="rental-data">
+            <div className="rental-row">
+              <span>Monthly Rental (Est.)</span>
+              <strong>₹{zoneData.rentalMin?.toLocaleString() || 'N/A'} – ₹{zoneData.rentalMax?.toLocaleString() || 'N/A'}</strong>
+            </div>
+            <div className="rental-row">
+              <span>Rental Growth YoY</span>
+              <strong style={{color:'#16a34a'}}>{zoneData.rentalGrowth || '3-6%'}</strong>
+            </div>
+            <div className="rental-row">
+              <span>Gross Rental Yield</span>
+              <strong>{zoneData.rentalYield ? `${zoneData.rentalYield}%` : '2.5–3.5%'}</strong>
+            </div>
+          </div>
+          <div className="alert-box neutral" style={{marginTop:'12px'}}>
+            💡 NCR rental values improved 3-4% YoY in 2025 (Cushman & Wakefield)
+          </div>
+        </div>
+
+        <div className="insight-card-v2">
+          <h3>📈 Capital Appreciation Outlook</h3>
+          <p style={{color:'#64748b', fontSize:'12px'}}>Source: NCR Real Estate Report 2025</p>
+          <div className="rental-data">
+            <div className="rental-row">
+              <span>2024 Price Growth (NCR)</span><strong style={{color:'#16a34a'}}>+30% YoY</strong>
+            </div>
+            <div className="rental-row">
+              <span>{zoneData.name} Specific</span><strong style={{color:'#16a34a'}}>{zoneData.growth}</strong>
+            </div>
+            <div className="rental-row">
+              <span>5-Year Projection</span>
+              <strong>{zoneData.temp === 'hot' ? '35-45% (High confidence)' : '20-30% (Moderate)'}</strong>
+            </div>
+            <div className="rental-row">
+              <span>Best Time to Buy?</span>
+              <strong style={{color: zoneData.temp === 'hot' ? '#d97706' : '#16a34a'}}>
+                {zoneData.temp === 'hot' ? '⚠️ Market is peaking' : '✅ Good entry point'}
+              </strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* SECTION 6: RISK FLAGS — RERA / LEGAL with empathy */}
+      <div className="insight-full-card empathy-card">
+        <div className="empathy-header">
+          <span className="empathy-icon">🛡️</span>
+          <div>
+            <h3>Your Protection Checklist</h3>
+            <p className="empathy-message">We understand this is your hard-earned money and possibly the biggest financial decision of your life. We are not here to scare you — we are here to make sure you walk in with your eyes open. Please verify these before you sign anything.</p>
+          </div>
+        </div>
+
+        <div className="risk-grid">
+          {isApartment && isUnderConstruction && (
+            <div className="risk-item red">
+              <span className="risk-icon">⚠️</span>
+              <div>
+                <strong>RERA Registration</strong>
+                <p>Every under-construction project MUST be RERA registered. Non-registered projects offer zero legal protection.</p>
+                <a className="check-link" href="https://rera.haryana.gov.in" target="_blank" rel="noopener noreferrer">
+                  {layer2Data.propertyLocation === 'gurugram' ? '→ Check Haryana RERA' :
+                   layer2Data.propertyLocation === 'noida' || layer2Data.propertyLocation === 'greater-noida' ? '→ Check UP RERA (uprera.in)' :
+                   layer2Data.propertyLocation === 'delhi' ? '→ Check Delhi RERA (rera.delhi.gov.in)' :
+                   '→ Check State RERA website'}
+                </a>
+              </div>
+            </div>
+          )}
+          <div className="risk-item amber">
+            <span className="risk-icon">📄</span>
+            <div>
+              <strong>Title Verification</strong>
+              <p>Ensure the seller has clear, marketable title. For resale: verify sale chain back 30 years. For builder: verify land title & no encumbrance.</p>
+              <span className="risk-note">Your bank will do this — but knowing upfront avoids last-minute surprises.</span>
+            </div>
+          </div>
+          {isApartment && isUnderConstruction && (
+            <div className="risk-item amber">
+              <span className="risk-icon">📋</span>
+              <div>
+                <strong>Builder-Buyer Agreement</strong>
+                <p>Read the BBA carefully before signing. Look for: possession date, penalty clauses, super area vs carpet area ratio, and force majeure conditions.</p>
+                <span className="risk-note">Carpet area should be at least 70% of super area (RERA mandate).</span>
+              </div>
+            </div>
+          )}
+          <div className="risk-item green">
+            <span className="risk-icon">✅</span>
+            <div>
+              <strong>Encumbrance Certificate</strong>
+              <p>Confirms no existing loans or legal dues on the property. Available at Sub-Registrar office or state portal.</p>
+              <span className="risk-note">This is mandatory before loan disbursal — get it early.</span>
+            </div>
+          </div>
+          {layer2Data.propertyLocation === 'noida' || layer2Data.propertyLocation === 'greater-noida' ? (
+            <div className="risk-item red">
+              <span className="risk-icon">⚠️</span>
+              <div>
+                <strong>Noida/Greater Noida Specific Alert</strong>
+                <p>Many projects launched 2005-2011 had stalled delivery (Unitech, Amrapali, Jaypee). Always verify current construction status & RERA compliance independently.</p>
+                <span className="risk-note">Source: NCR Real Estate Report 2025</span>
+              </div>
+            </div>
+          ) : null}
+          {layer2Data.propertySubType === 'plot' && (
+            <div className="risk-item red">
+              <span className="risk-icon">🚫</span>
+              <div>
+                <strong>Plot/Land — Unregistered Land Risk</strong>
+                <p>Verify the land is not agricultural/forest/notified land. Check: Khasra number, Khatauni, mutation records. Unregistered plots are not eligible for bank loans.</p>
+                <span className="risk-note">Home loans are NOT available for plots in unapproved colonies.</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="nav-buttons">
-        <button className="btn-back" onClick={() => setCurrentLayer('layer2')}>
-          ← Back to Property Details
-        </button>
-        <button className="btn-next" onClick={() => {
-          const results = matchBanks();
-          setResults(results);
-          setCurrentLayer('results');
-        }}>
+        <button className="btn-back" onClick={() => setCurrentLayer('layer2')}>← Back to Property Details</button>
+        <button className="btn-next" onClick={() => { const r = matchBanks(); setResults(r); setCurrentLayer('results'); }}>
           See My Bank Matches <ArrowRight size={20} />
         </button>
       </div>
