@@ -823,10 +823,8 @@ const renderPropertyInsights = () => {
   const isApartment = layer2Data.propertySubType === 'apartment';
   const isUnderConstruction = layer2Data.propertyCategory === 'builder-new';
   const estimatedSqFt = Math.round(propertyVal / zoneData.avgPrice);
-  const priceDiff = 0; // within market
-  const isGoodDeal = priceDiff < -10;
-  const isExpensive = priceDiff > 10;
-
+  // Price difference now calculated inside confidence score logic
+  
   // GST/TDS cost calculations (apartments only)
   const gstAmt = isUnderConstruction ? Math.round(propertyVal * 0.05) : 0;
   const tdsAmt = propertyVal > 5000000 ? Math.round(propertyVal * 0.01) : 0;
@@ -835,12 +833,42 @@ const renderPropertyInsights = () => {
   const edcHaryana = layer2Data.propertyLocation === 'gurugram' ? Math.round(propertyVal * 0.015) : 0;
   const totalAdditional = gstAmt + tdsAmt + stampDuty + regFee + edcHaryana;
 
-  // Confidence score gamification
+  // Confidence score gamification - FIXED LOGIC
   const scores = {
-    priceScore: isGoodDeal ? 95 : isExpensive ? 55 : 78,
+    // 1. Price Score (0-100)
+    priceScore: (() => {
+      const priceDiff = ((propertyVal / estimatedSqFt) - zoneData.avgPrice) / zoneData.avgPrice * 100;
+      if (priceDiff < -10) return 95; // Great deal
+      if (priceDiff > 15) return 50;  // Overpriced
+      if (priceDiff > 10) return 60;  // Above market
+      if (priceDiff > 5) return 72;   // Slightly high
+      return 78; // Fair price
+    })(),
+    
+    // 2. Market Score (0-100)
     marketScore: zoneData.temp === 'hot' ? 90 : zoneData.temp === 'warm' ? 72 : 55,
-    legalScore: isUnderConstruction ? 65 : 80,
-    rentalScore: zoneData.rentalYield ? Math.round(zoneData.rentalYield * 10) : 68,
+    
+    // 3. Legal Readiness Score (0-100) - CORRECTED
+    legalScore: (() => {
+      if (isUnderConstruction) {
+        // Under-construction — check if it's premium location (implies Tier 1 builder)
+        if (propertyVal >= 50000000) return 85; // ₹5 Cr+ = likely DLF/M3M/Godrej
+        if (propertyVal >= 20000000) return 75; // ₹2-5 Cr = likely Tier 2 builder
+        return 65; // <₹2 Cr UC = needs more diligence
+      } else {
+        return 90; // Ready-to-move with clear title = safest
+      }
+    })(),
+    
+    // 4. Rental Score (0-100) - CORRECTED MATH
+    rentalScore: (() => {
+      const yield_pct = zoneData.rentalYield || 2.8;
+      if (yield_pct >= 3.5) return 90; // Excellent for NCR
+      if (yield_pct >= 3.0) return 78; // Good
+      if (yield_pct >= 2.5) return 65; // Average
+      if (yield_pct >= 2.0) return 52; // Below average
+      return 40; // Poor
+    })(),
   };
   const overallScore = Math.round((scores.priceScore + scores.marketScore + scores.legalScore + scores.rentalScore) / 4);
   const scoreLabel = overallScore >= 80 ? 'Excellent Buy' : overallScore >= 65 ? 'Good Buy' : 'Proceed with Caution';
@@ -904,9 +932,12 @@ const renderPropertyInsights = () => {
             <div className="price-row"><span>Area Avg (PSF):</span><strong>₹{zoneData.avgPrice.toLocaleString()}/sq ft</strong></div>
             <div className="price-row"><span>Estimated Size:</span><strong>~{estimatedSqFt} sq ft</strong></div>
           </div>
-          {isGoodDeal && <div className="alert-box good-deal">✅ <strong>Good Deal!</strong> Below market average</div>}
-          {isExpensive && <div className="alert-box verify-alert">⚠️ <strong>Above Market.</strong> Verify amenities justify premium.</div>}
-          {!isGoodDeal && !isExpensive && <div className="alert-box neutral">✓ <strong>Fair Price</strong> — aligned with area average</div>}
+          {(() => {
+            const priceDiff = ((propertyVal / estimatedSqFt) - zoneData.avgPrice) / zoneData.avgPrice * 100;
+            if (priceDiff < -10) return <div className="alert-box good-deal">✅ <strong>Good Deal!</strong> {Math.abs(priceDiff).toFixed(0)}% below market average</div>;
+            if (priceDiff > 10) return <div className="alert-box verify-alert">⚠️ <strong>Above Market.</strong> {priceDiff.toFixed(0)}% higher — verify amenities justify premium.</div>;
+            return <div className="alert-box neutral">✓ <strong>Fair Price</strong> — within {Math.abs(priceDiff).toFixed(0)}% of market average</div>;
+          })()}
         </div>
 
         <div className="insight-card-v2">
@@ -1182,6 +1213,11 @@ const renderPropertyInsights = () => {
         <div className="results-header">
           <h1>Your Loan Assessment Results</h1>
           <p>Based on your profile and property value</p>
+        </div>
+
+        {/* Rate Freshness Disclaimer */}
+        <div className="rate-disclaimer">
+          ⓘ <strong>Interest rates as of February 2026.</strong> Bank rates change monthly. Always verify current rates on the bank's official website before applying. Processing times and fees are indicative — actual may vary by case complexity.
         </div>
 
         {/* Key Finding */}
