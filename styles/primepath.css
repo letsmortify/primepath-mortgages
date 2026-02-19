@@ -1458,7 +1458,23 @@ label {
   .confidence-banner { grid-template-columns: 1fr; }
   .confidence-main { border-right: none; border-bottom: 2px solid #f1f5f9; padding-right: 0; padding-bottom: 20px; }
   .insights-grid-v2 { grid-template-columns: 1fr; }
-  .risk-grid { grid-template-columns: 1fr; }
+
+
+  /* ======= RATE FRESHNESS DISCLAIMER ======= */
+.rate-disclaimer {
+  background: #fef9c3;
+  border: 1px solid #fcd34d;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: #92400e;
+  line-height: 1.6;
+}
+
+.rate-disclaimer strong {
+  color: #78350f;
+}  .risk-grid { grid-template-columns: 1fr; }
   .cost-row { grid-template-columns: 1fr 1fr; font-size: 12px; }
   .compare-row { grid-template-columns: 1fr 1fr; font-size: 12px; }
 }
