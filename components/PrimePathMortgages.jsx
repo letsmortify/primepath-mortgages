@@ -170,6 +170,18 @@ const NCR_MICROMARKETS = {
 };
 
 const PrimePathMortgages = () => {
+  // VALIDATION CONSTANTS
+  const LIMITS = {
+    minLoan: 3000000,      // ₹30L
+    maxLoan: 150000000,    // ₹15 Cr
+    minIncome: 15000,      // ₹15K/month
+    maxIncome: 10000000,   // ₹1 Cr/month (catches data entry errors)
+    minPropertyValue: 1000000,   // ₹10L
+    maxPropertyValue: 500000000, // ₹50 Cr
+    minEMI: 0,
+    maxEMI: 5000000,       // ₹50L/month (catches errors)
+  };
+
   const [currentLayer, setCurrentLayer] = useState('intro'); // intro, layer1, layer2, results
   const [layer1Data, setLayer1Data] = useState({
     employmentType: '', // govt-salaried, private-salaried, professional, employer
@@ -187,6 +199,7 @@ const PrimePathMortgages = () => {
   const [layer2Data, setLayer2Data] = useState({
     loanType: '', // HL or LAP
     propertySubType: '', // apartment, plot, house, office
+    propertyUsage: '', // residential, commercial, vacant
     propertyCategory: '', // builder-new, resale
     decidingDocument: '', // agreement-to-sell, booking-form, property-papers
     propertyValue: '', // from deciding document
@@ -195,6 +208,8 @@ const PrimePathMortgages = () => {
 });
 
   const [results, setResults] = useState(null);
+  const [kycData, setKycData] = useState({ name: '', phone: '', email: '', agreedToTerms: false });
+  const [showKycGate, setShowKycGate] = useState(false);
 
   // Calculate customer capacity (A) from Layer 1
   const calculateCustomerCapacity = () => {
@@ -370,9 +385,45 @@ const PrimePathMortgages = () => {
     const requiredLayer1 = ['employmentType', 'customerPreference', 'loanAmountNeeded', 'monthlyIncome', 'loanTenure', 'existingEMIs', 'borrowerType', 'missedPayments12m', 'missedPayments5y', 'cibilRange'];
     const allFilled = requiredLayer1.every(f => layer1Data[f] !== '');
     if (!allFilled) {
-      alert('Please fill all fields to continue');
+      alert('❌ Please fill all fields to continue');
       return;
     }
+    
+    // RANGE VALIDATION
+    const loan = parseInt(layer1Data.loanAmountNeeded);
+    const income = parseInt(layer1Data.monthlyIncome);
+    const emi = parseInt(layer1Data.existingEMIs);
+    
+    if (loan < LIMITS.minLoan || loan > LIMITS.maxLoan) {
+      alert(`❌ Loan amount must be between ₹${(LIMITS.minLoan/100000).toFixed(0)}L and ₹${(LIMITS.maxLoan/10000000).toFixed(0)} Cr`);
+      return;
+    }
+    if (income < LIMITS.minIncome || income > LIMITS.maxIncome) {
+      alert(`❌ Monthly income must be between ₹${(LIMITS.minIncome/1000).toFixed(0)}K and ₹${(LIMITS.maxIncome/100000).toFixed(0)}L`);
+      return;
+    }
+    if (emi > LIMITS.maxEMI) {
+      alert(`❌ Existing EMI seems too high (>₹${(LIMITS.maxEMI/100000).toFixed(0)}L/month). Please verify.`);
+      return;
+    }
+    
+    // RISKY PROFILE WARNINGS
+    const warnings = [];
+    if (parseInt(layer1Data.cibilRange) < 650) {
+      warnings.push('⚠️ CIBIL score below 650 may result in higher interest rates or rejection');
+    }
+    if ((emi / income) > 0.4) {
+      warnings.push('⚠️ Your existing EMIs are >40% of income — this reduces eligibility significantly');
+    }
+    if (layer1Data.missedPayments12m === 'yes' || layer1Data.missedPayments5y === 'yes') {
+      warnings.push('⚠️ Missed payments in credit history may affect approval chances');
+    }
+    
+    if (warnings.length > 0) {
+      const proceed = confirm(`${warnings.join('\n\n')}\n\nDo you want to continue?`);
+      if (!proceed) return;
+    }
+    
     setCurrentLayer('layer2');
   };
 
@@ -380,15 +431,41 @@ const handleLayer2Submit = () => {
   const requiredFields = ['loanType', 'propertySubType', 'propertyCategory', 'decidingDocument', 'propertyValue', 'propertyLocation'];
   const allRequiredFilled = requiredFields.every(field => layer2Data[field] !== '');
   if (!allRequiredFilled) {
-    alert('Please fill all required fields including property type');
+    alert('❌ Please fill all required fields including property type');
     return;
   }
+  
+  // Check usage for resale properties
+  if (layer2Data.propertyCategory === 'resale' && !layer2Data.propertyUsage) {
+    alert('❌ Please specify current property usage');
+    return;
+  }
+  
+  // PROPERTY VALUE VALIDATION
+  const propValue = parseInt(layer2Data.propertyValue);
+  if (propValue < LIMITS.minPropertyValue || propValue > LIMITS.maxPropertyValue) {
+    alert(`❌ Property value must be between ₹${(LIMITS.minPropertyValue/100000).toFixed(0)}L and ₹${(LIMITS.maxPropertyValue/10000000).toFixed(0)} Cr`);
+    return;
+  }
+  
+  // SANITY CHECK: Loan vs Property
+  const loanAmt = parseInt(layer1Data.loanAmountNeeded);
+  if (loanAmt > propValue) {
+    alert('❌ Loan amount cannot exceed property value. Please adjust.');
+    return;
+  }
+  
+  // DEVIATION CASE WARNING
+  if (layer2Data.propertyUsage === 'commercial') {
+    const proceed = confirm('⚠️ DEVIATION CASE DETECTED\n\nProperty is being used for commercial purposes (office/business/tuition).\n\nThis requires special approval from the bank:\n• Processing time may increase by 10-15 days\n• Additional documentation may be required\n• Interest rate may be slightly higher\n\nDo you want to continue?');
+    if (!proceed) return;
+  }
+  
   if (layer2Data.microMarket) {
     setCurrentLayer('propertyInsights');
   } else {
-    const results = matchBanks();
-    setResults(results);
-    setCurrentLayer('results');
+    // Show KYC gate before results
+    setShowKycGate(true);
   }
 };
   const renderIntro = () => (
@@ -502,10 +579,16 @@ const handleLayer2Submit = () => {
             <input
               type="number"
               placeholder="40,00,000"
+              min={LIMITS.minLoan}
+              max={LIMITS.maxLoan}
               value={layer1Data.loanAmountNeeded}
               onChange={(e) => setLayer1Data({...layer1Data, loanAmountNeeded: e.target.value})}
             />
           </div>
+          <span className="hint">Min: ₹30L | Max: ₹15 Cr</span>
+          {layer1Data.loanAmountNeeded && (parseInt(layer1Data.loanAmountNeeded) < LIMITS.minLoan || parseInt(layer1Data.loanAmountNeeded) > LIMITS.maxLoan) && (
+            <span className="error-hint">⚠️ Loan amount must be between ₹30L and ₹15 Cr</span>
+          )}
         </div>
 
         <div className="input-group">
@@ -515,11 +598,16 @@ const handleLayer2Submit = () => {
             <input
               type="number"
               placeholder="80,000"
+              min={LIMITS.minIncome}
+              max={LIMITS.maxIncome}
               value={layer1Data.monthlyIncome}
               onChange={(e) => setLayer1Data({...layer1Data, monthlyIncome: e.target.value})}
             />
           </div>
-          <span className="hint">After all deductions (PF, tax, etc.)</span>
+          <span className="hint">After all deductions (PF, tax, etc.) | Min: ₹15K/month</span>
+          {layer1Data.monthlyIncome && (parseInt(layer1Data.monthlyIncome) < LIMITS.minIncome || parseInt(layer1Data.monthlyIncome) > LIMITS.maxIncome) && (
+            <span className="error-hint">⚠️ Income must be between ₹15K and ₹1 Cr/month</span>
+          )}
         </div>
 
         {/* LOAN TENURE */}
@@ -547,11 +635,16 @@ const handleLayer2Submit = () => {
             <input
               type="number"
               placeholder="0"
+              min={LIMITS.minEMI}
+              max={LIMITS.maxEMI}
               value={layer1Data.existingEMIs}
               onChange={(e) => setLayer1Data({...layer1Data, existingEMIs: e.target.value})}
             />
           </div>
           <span className="hint">Car loan, personal loan, credit cards - all combined</span>
+          {layer1Data.existingEMIs && parseInt(layer1Data.existingEMIs) > LIMITS.maxEMI && (
+            <span className="error-hint">⚠️ EMI amount seems too high — please verify</span>
+          )}
         </div>
 
         <div className="input-group">
@@ -736,6 +829,43 @@ const handleLayer2Submit = () => {
           </div>
         )}
 
+        {/* PROPERTY USAGE — Fraud Detection */}
+        {layer2Data.propertyCategory && layer2Data.propertyCategory === 'resale' && (
+          <div className="input-group">
+            <label>🏠 Current usage of the property?</label>
+            <span className="hint">Banks verify property usage — commercial use on residential loan is a red flag</span>
+            <div className="radio-group vertical" style={{marginTop:'8px'}}>
+              <label className="radio-card" style={{borderColor: layer2Data.propertyUsage === 'residential' ? '#2563eb' : '#e2e8f0', background: layer2Data.propertyUsage === 'residential' ? '#eff6ff' : 'white'}}>
+                <input type="radio" name="propertyUsage" value="residential"
+                  checked={layer2Data.propertyUsage === 'residential'}
+                  onChange={(e) => setLayer2Data({...layer2Data, propertyUsage: e.target.value})} />
+                <div>
+                  <strong>✅ Residential Use</strong>
+                  <p>Self-occupied or rented to a family (standard case)</p>
+                </div>
+              </label>
+              <label className="radio-card" style={{borderColor: layer2Data.propertyUsage === 'commercial' ? '#dc2626' : '#e2e8f0', background: layer2Data.propertyUsage === 'commercial' ? '#fef2f2' : 'white'}}>
+                <input type="radio" name="propertyUsage" value="commercial"
+                  checked={layer2Data.propertyUsage === 'commercial'}
+                  onChange={(e) => setLayer2Data({...layer2Data, propertyUsage: e.target.value})} />
+                <div>
+                  <strong>⚠️ Business / Office / Tuition Use</strong>
+                  <p>Requires special approval — processing time increases</p>
+                </div>
+              </label>
+              <label className="radio-card" style={{borderColor: layer2Data.propertyUsage === 'vacant' ? '#2563eb' : '#e2e8f0', background: layer2Data.propertyUsage === 'vacant' ? '#eff6ff' : 'white'}}>
+                <input type="radio" name="propertyUsage" value="vacant"
+                  checked={layer2Data.propertyUsage === 'vacant'}
+                  onChange={(e) => setLayer2Data({...layer2Data, propertyUsage: e.target.value})} />
+                <div>
+                  <strong>✅ Vacant / Ready for Possession</strong>
+                  <p>Not currently occupied (clean case)</p>
+                </div>
+              </label>
+            </div>
+          </div>
+        )}
+
         {layer2Data.decidingDocument && (
           <div className="deciding-doc-card">
             <h4>📄 Deciding Document Required:</h4>
@@ -757,11 +887,16 @@ const handleLayer2Submit = () => {
             <input
               type="number"
               placeholder="50,00,000"
+              min={LIMITS.minPropertyValue}
+              max={LIMITS.maxPropertyValue}
               value={layer2Data.propertyValue}
               onChange={(e) => setLayer2Data({...layer2Data, propertyValue: e.target.value})}
             />
           </div>
-          <span className="hint">Enter the exact amount mentioned in the document</span>
+          <span className="hint">Enter the exact amount mentioned in the document | Min: ₹10L | Max: ₹50 Cr</span>
+          {layer2Data.propertyValue && (parseInt(layer2Data.propertyValue) < LIMITS.minPropertyValue || parseInt(layer2Data.propertyValue) > LIMITS.maxPropertyValue) && (
+            <span className="error-hint">⚠️ Property value must be between ₹10L and ₹50 Cr</span>
+          )}
         </div>
 
         <div className="input-group">
@@ -1190,13 +1325,113 @@ const renderPropertyInsights = () => {
 
       <div className="nav-buttons">
         <button className="btn-back" onClick={() => setCurrentLayer('layer2')}>← Back to Property Details</button>
-        <button className="btn-next" onClick={() => { const r = matchBanks(); setResults(r); setCurrentLayer('results'); }}>
+        <button className="btn-next" onClick={() => setShowKycGate(true)}>
           See My Bank Matches <ArrowRight size={20} />
         </button>
       </div>
     </div>
   );
 };
+
+  const renderKycGate = () => {
+    const handleKycSubmit = () => {
+      if (!kycData.name || !kycData.phone || !kycData.email) {
+        alert('❌ Please provide your name, phone, and email to continue');
+        return;
+      }
+      if (!kycData.agreedToTerms) {
+        alert('❌ Please agree to Terms of Service to continue');
+        return;
+      }
+      
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(kycData.email)) {
+        alert('❌ Please enter a valid email address');
+        return;
+      }
+      
+      // Basic phone validation (10 digits)
+      const phoneRegex = /^[6-9]\d{9}$/;
+      if (!phoneRegex.test(kycData.phone)) {
+        alert('❌ Please enter a valid 10-digit mobile number');
+        return;
+      }
+      
+      // Generate results and show
+      const r = matchBanks();
+      setResults(r);
+      setShowKycGate(false);
+      setCurrentLayer('results');
+    };
+    
+    return (
+      <div className="kyc-gate-overlay">
+        <div className="kyc-gate-modal">
+          <h2>🔐 Almost There!</h2>
+          <p className="kyc-subtitle">Get your personalized bank matches in 30 seconds</p>
+          
+          <div className="kyc-form">
+            <div className="kyc-input-group">
+              <label>👤 Full Name</label>
+              <input
+                type="text"
+                placeholder="As per PAN card"
+                value={kycData.name}
+                onChange={(e) => setKycData({...kycData, name: e.target.value})}
+              />
+            </div>
+            
+            <div className="kyc-input-group">
+              <label>📱 Mobile Number</label>
+              <input
+                type="tel"
+                placeholder="10-digit mobile"
+                maxLength="10"
+                value={kycData.phone}
+                onChange={(e) => setKycData({...kycData, phone: e.target.value})}
+              />
+            </div>
+            
+            <div className="kyc-input-group">
+              <label>📧 Email Address</label>
+              <input
+                type="email"
+                placeholder="your.email@example.com"
+                value={kycData.email}
+                onChange={(e) => setKycData({...kycData, email: e.target.value})}
+              />
+            </div>
+            
+            <div className="kyc-terms">
+              <label className="terms-checkbox">
+                <input
+                  type="checkbox"
+                  checked={kycData.agreedToTerms}
+                  onChange={(e) => setKycData({...kycData, agreedToTerms: e.target.checked})}
+                />
+                <span>
+                  I agree to <a href="#" onClick={(e) => { e.preventDefault(); alert('Terms: Data used only for loan matching. Not shared with third parties without consent.'); }}>Terms of Service</a> and acknowledge this is for informational purposes only (not financial advice)
+                </span>
+              </label>
+            </div>
+            
+            <div className="kyc-actions">
+              <button className="btn-back" onClick={() => setShowKycGate(false)}>← Back</button>
+              <button className="btn-kyc-submit" onClick={handleKycSubmit}>
+                Show My Matches 🎯
+              </button>
+            </div>
+          </div>
+          
+          <div className="kyc-disclaimer">
+            <p>🔒 <strong>Your data is safe.</strong> We use bank-grade encryption. Your information is used solely for loan matching and will never be sold to third parties without your explicit consent.</p>
+            <p>⚖️ <strong>Not financial advice.</strong> This tool provides indicative eligibility based on standard bank policies. Final approval depends on bank's discretion, document verification, and credit assessment.</p>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const renderResults = () => {
     if (!results) return null;
@@ -1650,6 +1885,7 @@ const renderPropertyInsights = () => {
 
   return (
   <div className="app">
+    {showKycGate && renderKycGate()}
     {currentLayer === 'intro' && renderIntro()}
     {currentLayer === 'layer1' && renderLayer1()}
     {currentLayer === 'layer2' && renderLayer2()}
