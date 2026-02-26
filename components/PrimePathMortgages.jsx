@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import { Home, Briefcase, Calculator, FileText, TrendingUp, Info, CheckCircle, ArrowRight, Building2, DollarSign } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
+
+// SUPABASE CONNECTION
+const supabaseUrl = 'https://maqbmrdxnxeuhrtcguqa.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcWJtcmR4bnhldWhydGNndXFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxMjE2MDMsImV4cCI6MjA4NDY5NzYwM30.akvny8A5QGrZSgAtXhh44IXrk-mMGTOGt7lRfb7r8D0';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 
 // BANK DATA - Real PSU + Private + MNC banks for NCR
 const BANK_POLICIES = {
@@ -48,7 +55,7 @@ const BANK_POLICIES = {
     category: "Private",
     ltvHL: 0.90,
     ltvLAP: 0.70,
-    maxDBR: 0.50,
+    maxDBR: 0.75,
     processingFee: 0.50,
     rateHL: 8.75,
     rateLAP: 9.50,
@@ -60,7 +67,7 @@ const BANK_POLICIES = {
     category: "Private",
     ltvHL: 0.90,
     ltvLAP: 0.65,
-    maxDBR: 0.50,
+    maxDBR: 0.75,
     processingFee: 0.50,
     rateHL: 8.70,
     rateLAP: 9.45,
@@ -74,7 +81,7 @@ const BANK_POLICIES = {
     category: "Multinational",
     ltvHL: 0.80,
     ltvLAP: 0.60,
-    maxDBR: 0.45,
+    maxDBR: 0.60,
     processingFee: 0.50,
     rateHL: 8.85,
     rateLAP: 9.60,
@@ -86,7 +93,7 @@ const BANK_POLICIES = {
     category: "Multinational",
     ltvHL: 0.80,
     ltvLAP: 0.60,
-    maxDBR: 0.45,
+    maxDBR: 0.60,
     processingFee: 0.50,
     rateHL: 8.90,
     rateLAP: 9.65,
@@ -204,11 +211,19 @@ const PrimePathMortgages = () => {
     decidingDocument: '', // agreement-to-sell, booking-form, property-papers
     propertyValue: '', // from deciding document
     propertyLocation: '',
-    microMarket: '' // NEW - Specific area/zone
-});
+    microMarket: '', // NEW - Specific area/zone
+    
+    // DETAILED PROPERTY CAPTURE (Path A):
+    buildingSocietyName: '', // "Mahagun Moderne"
+    exactSector: '', // "Sector 78"
+    builderName: '', // "Mahagun"
+    bhkConfig: '', // "2 BHK", "3 BHK"
+    propertyAge: '', // for resale
+    carpetArea: '', // sq ft
+  });
 
   const [results, setResults] = useState(null);
-  const [kycData, setKycData] = useState({ name: '', phone: '', email: '', agreedToTerms: false });
+  const [kycData, setKycData] = useState({ name: '', phone: '', email: '', agreedToTerms: false, consentToContact: false });
   const [showKycGate, setShowKycGate] = useState(false);
 
   // Calculate customer capacity (A) from Layer 1
@@ -935,6 +950,93 @@ const handleLayer2Submit = () => {
     <span className="hint">This helps us give you accurate market insights</span>
   </div>
 )}
+
+        {/* DETAILED PROPERTY CAPTURE - Path A (for ALL apartments) */}
+        {layer2Data.propertyLocation && layer2Data.propertySubType === 'apartment' && layer2Data.propertyCategory && (
+          <div className="property-details-section">
+            <h3 style={{fontSize:'18px', color:'#1e293b', marginBottom:'16px'}}>📋 Property Details (for personalized matching)</h3>
+            
+            <div className="input-group">
+              <label>Building / Society Name</label>
+              <input
+                type="text"
+                placeholder="e.g., Mahagun Moderne, DLF Crest, Godrej Oasis"
+                value={layer2Data.buildingSocietyName}
+                onChange={(e) => setLayer2Data({...layer2Data, buildingSocietyName: e.target.value})}
+                className="text-input"
+              />
+              <span className="hint">Exact name as per booking/agreement</span>
+            </div>
+
+            <div className="input-group">
+              <label>Builder / Developer Name</label>
+              <input
+                type="text"
+                placeholder="e.g., Mahagun, DLF, Godrej, M3M"
+                value={layer2Data.builderName}
+                onChange={(e) => setLayer2Data({...layer2Data, builderName: e.target.value})}
+                className="text-input"
+              />
+            </div>
+
+            <div className="input-group">
+              <label>Exact Sector / Tower / Wing</label>
+              <input
+                type="text"
+                placeholder="e.g., Sector 78, Tower B, Wing C"
+                value={layer2Data.exactSector}
+                onChange={(e) => setLayer2Data({...layer2Data, exactSector: e.target.value})}
+                className="text-input"
+              />
+            </div>
+
+            <div className="input-group">
+              <label>BHK Configuration</label>
+              <select
+                value={layer2Data.bhkConfig}
+                onChange={(e) => setLayer2Data({...layer2Data, bhkConfig: e.target.value})}
+                className="select-input"
+              >
+                <option value="">Select BHK</option>
+                <option value="1 BHK">1 BHK</option>
+                <option value="2 BHK">2 BHK</option>
+                <option value="3 BHK">3 BHK</option>
+                <option value="4 BHK">4 BHK</option>
+                <option value="5+ BHK">5+ BHK (Villa/Penthouse)</option>
+              </select>
+            </div>
+
+            <div className="input-group">
+              <label>Carpet Area (in sq ft)</label>
+              <input
+                type="number"
+                placeholder="e.g., 1200"
+                value={layer2Data.carpetArea}
+                onChange={(e) => setLayer2Data({...layer2Data, carpetArea: e.target.value})}
+                className="text-input"
+              />
+              <span className="hint">As per sale agreement / possession letter</span>
+            </div>
+
+            {layer2Data.propertyCategory === 'resale' && (
+              <div className="input-group">
+                <label>Property Age (if resale)</label>
+                <select
+                  value={layer2Data.propertyAge}
+                  onChange={(e) => setLayer2Data({...layer2Data, propertyAge: e.target.value})}
+                  className="select-input"
+                >
+                  <option value="">Select age</option>
+                  <option value="0-5 years">0-5 years</option>
+                  <option value="5-10 years">5-10 years</option>
+                  <option value="10-20 years">10-20 years</option>
+                  <option value="20+ years">20+ years</option>
+                </select>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="nav-buttons">
           <button className="btn-back" onClick={() => setCurrentLayer('layer1')}>
             ← Back
@@ -1334,13 +1436,17 @@ const renderPropertyInsights = () => {
 };
 
   const renderKycGate = () => {
-    const handleKycSubmit = () => {
+    const handleKycSubmit = async () => {
       if (!kycData.name || !kycData.phone || !kycData.email) {
         alert('❌ Please provide your name, phone, and email to continue');
         return;
       }
       if (!kycData.agreedToTerms) {
         alert('❌ Please agree to Terms of Service to continue');
+        return;
+      }
+      if (!kycData.consentToContact) {
+        alert('❌ Please provide consent to be contacted for loan assistance');
         return;
       }
       
@@ -1358,9 +1464,70 @@ const renderPropertyInsights = () => {
         return;
       }
       
-      // Generate results and show
-      const r = matchBanks();
-      setResults(r);
+      // Generate results
+      const matchResults = matchBanks();
+      
+      // SAVE LEAD TO SUPABASE
+      try {
+        const leadData = {
+          // Contact Info
+          email: kycData.email,
+          phone: kycData.phone,
+          name: kycData.name,
+          consent_given: kycData.consentToContact,
+          
+          // Financial Profile (Layer 1)
+          employment_type: layer1Data.employmentType,
+          monthly_salary: parseInt(layer1Data.monthlyIncome),
+          loan_amount_needed: parseInt(layer1Data.loanAmountNeeded),
+          loan_tenure: parseInt(layer1Data.loanTenure),
+          current_emis: parseInt(layer1Data.existingEMIs) || 0,
+          cibil_range: layer1Data.cibilRange,
+          customer_preference: layer1Data.customerPreference,
+          
+          // Property Details (Layer 2)
+          city: layer2Data.propertyLocation,
+          property_type: layer2Data.propertySubType,
+          property_category: layer2Data.propertyCategory,
+          property_value: parseInt(layer2Data.propertyValue),
+          micro_market: layer2Data.microMarket || null,
+          
+          // Detailed Property (Path A)
+          building_name: layer2Data.buildingSocietyName || null,
+          builder_name: layer2Data.builderName || null,
+          exact_sector: layer2Data.exactSector || null,
+          bhk_config: layer2Data.bhkConfig || null,
+          carpet_area: layer2Data.carpetArea ? parseInt(layer2Data.carpetArea) : null,
+          property_age: layer2Data.propertyAge || null,
+          
+          // Match Results
+          eligibility_score: matchResults.matches[0]?.matchScore || 0,
+          max_loan_amount: matchResults.finalEligibleAmount,
+          matched_bank: matchResults.matches[0]?.name || null,
+          matched_bank_rate: matchResults.matches[0]?.rateHL || null,
+          
+          // System
+          status: 'new',
+          notes: `Top banks: ${matchResults.matches.slice(0,3).map(m => `${m.shortName}(${m.matchScore})`).join(', ')}`
+        };
+        
+        const { data, error } = await supabase
+          .from('leads')
+          .insert([leadData])
+          .select();
+        
+        if (error) {
+          console.error('Supabase error:', error);
+          alert('⚠️ Lead saved locally but may not sync to database. Results will still show.');
+        } else {
+          console.log('✅ Lead saved:', data[0].id);
+        }
+      } catch (err) {
+        console.error('Error saving lead:', err);
+      }
+      
+      // Show results regardless of database status
+      setResults(matchResults);
       setShowKycGate(false);
       setCurrentLayer('results');
     };
@@ -1412,6 +1579,17 @@ const renderPropertyInsights = () => {
                 />
                 <span>
                   I agree to <a href="#" onClick={(e) => { e.preventDefault(); alert('Terms: Data used only for loan matching. Not shared with third parties without consent.'); }}>Terms of Service</a> and acknowledge this is for informational purposes only (not financial advice)
+                </span>
+              </label>
+              
+              <label className="terms-checkbox" style={{marginTop:'12px'}}>
+                <input
+                  type="checkbox"
+                  checked={kycData.consentToContact}
+                  onChange={(e) => setKycData({...kycData, consentToContact: e.target.checked})}
+                />
+                <span>
+                  <strong>I hereby consent to be contacted by PrimePath Mortgages</strong> via phone/email/WhatsApp for loan assistance, document collection, and bank coordination
                 </span>
               </label>
             </div>
