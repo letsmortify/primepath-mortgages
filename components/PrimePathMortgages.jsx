@@ -5,7 +5,13 @@ import { createClient } from '@supabase/supabase-js';
 // SUPABASE CONNECTION
 const supabaseUrl = 'https://maqbmrdxnxeuhrtcguqa.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcWJtcmR4bnhldWhydGNndXFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxMjE2MDMsImV4cCI6MjA4NDY5NzYwM30.akvny8A5QGrZSgAtXhh44IXrk-mMGTOGt7lRfb7r8D0';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// SUPABASE CONNECTION (with error handling)
+let supabase = null;
+try {
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
+} catch (err) {
+  console.warn('Supabase connection failed (non-critical):', err);
+}
 
 
 // BANK DATA - Real PSU + Private + MNC banks for NCR
@@ -1510,64 +1516,68 @@ const renderPropertyInsights = () => {
       // Generate results
       const matchResults = matchBanks();
       
-      // SAVE LEAD TO SUPABASE
-      try {
-        const leadData = {
-          // Contact Info
-          email: kycData.email,
-          phone: kycData.phone,
-          name: kycData.name,
-          consent_given: kycData.consentToContact,
+      // SAVE LEAD TO SUPABASE (if available)
+      if (supabase) {
+        try {
+          const leadData = {
+            // Contact Info
+            email: kycData.email,
+            phone: kycData.phone,
+            name: kycData.name,
+            consent_given: kycData.consentToContact,
+            
+            // Financial Profile (Layer 1)
+            employment_type: layer1Data.employmentType,
+            customer_age: parseInt(layer1Data.customerAge),
+            monthly_salary: parseInt(layer1Data.monthlyIncome),
+            loan_amount_needed: parseInt(layer1Data.loanAmountNeeded),
+            loan_tenure: parseInt(layer1Data.loanTenure),
+            current_emis: parseInt(layer1Data.existingEMIs) || 0,
+            cibil_range: layer1Data.cibilRange,
+            customer_preference: layer1Data.customerPreference,
+            
+            // Property Details (Layer 2)
+            city: layer2Data.propertyLocation,
+            property_type: layer2Data.propertySubType,
+            property_category: layer2Data.propertyCategory,
+            property_value: parseInt(layer2Data.propertyValue),
+            micro_market: layer2Data.microMarket || null,
+            
+            // Detailed Property (Path A)
+            building_name: layer2Data.buildingSocietyName || null,
+            builder_name: layer2Data.builderName || null,
+            exact_sector: layer2Data.exactSector || null,
+            bhk_config: layer2Data.bhkConfig || null,
+            carpet_area: layer2Data.carpetArea ? parseInt(layer2Data.carpetArea) : null,
+            property_age: layer2Data.propertyAge || null,
+            
+            // Match Results
+            eligibility_score: matchResults.matches[0]?.matchScore || 0,
+            max_loan_amount: matchResults.finalEligibleAmount,
+            matched_bank: matchResults.matches[0]?.name || null,
+            matched_bank_rate: matchResults.matches[0]?.rateHL || null,
+            
+            // System
+            status: 'new',
+            notes: `Top banks: ${matchResults.matches.slice(0,3).map(m => `${m.shortName}(${m.matchScore})`).join(', ')}`
+          };
           
-          // Financial Profile (Layer 1)
-          employment_type: layer1Data.employmentType,
-          customer_age: parseInt(layer1Data.customerAge),
-          monthly_salary: parseInt(layer1Data.monthlyIncome),
-          loan_amount_needed: parseInt(layer1Data.loanAmountNeeded),
-          loan_tenure: parseInt(layer1Data.loanTenure),
-          current_emis: parseInt(layer1Data.existingEMIs) || 0,
-          cibil_range: layer1Data.cibilRange,
-          customer_preference: layer1Data.customerPreference,
+          const { data, error } = await supabase
+            .from('leads')
+            .insert([leadData])
+            .select();
           
-          // Property Details (Layer 2)
-          city: layer2Data.propertyLocation,
-          property_type: layer2Data.propertySubType,
-          property_category: layer2Data.propertyCategory,
-          property_value: parseInt(layer2Data.propertyValue),
-          micro_market: layer2Data.microMarket || null,
-          
-          // Detailed Property (Path A)
-          building_name: layer2Data.buildingSocietyName || null,
-          builder_name: layer2Data.builderName || null,
-          exact_sector: layer2Data.exactSector || null,
-          bhk_config: layer2Data.bhkConfig || null,
-          carpet_area: layer2Data.carpetArea ? parseInt(layer2Data.carpetArea) : null,
-          property_age: layer2Data.propertyAge || null,
-          
-          // Match Results
-          eligibility_score: matchResults.matches[0]?.matchScore || 0,
-          max_loan_amount: matchResults.finalEligibleAmount,
-          matched_bank: matchResults.matches[0]?.name || null,
-          matched_bank_rate: matchResults.matches[0]?.rateHL || null,
-          
-          // System
-          status: 'new',
-          notes: `Top banks: ${matchResults.matches.slice(0,3).map(m => `${m.shortName}(${m.matchScore})`).join(', ')}`
-        };
-        
-        const { data, error } = await supabase
-          .from('leads')
-          .insert([leadData])
-          .select();
-        
-        if (error) {
-          console.error('Supabase error:', error);
-          alert('⚠️ Lead saved locally but may not sync to database. Results will still show.');
-        } else {
-          console.log('✅ Lead saved:', data[0].id);
+          if (error) {
+            console.error('Supabase error:', error);
+            alert('⚠️ Lead saved locally but may not sync to database. Results will still show.');
+          } else {
+            console.log('✅ Lead saved:', data[0].id);
+          }
+        } catch (err) {
+          console.error('Error saving lead:', err);
         }
-      } catch (err) {
-        console.error('Error saving lead:', err);
+      } else {
+        console.warn('Supabase not available - lead not saved to database');
       }
       
       // Show results regardless of database status
