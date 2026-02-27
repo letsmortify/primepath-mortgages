@@ -193,6 +193,7 @@ const PrimePathMortgages = () => {
   const [layer1Data, setLayer1Data] = useState({
     employmentType: '', // govt-salaried, private-salaried, professional, employer
     customerPreference: '', // speed, rate, cost, service
+    customerAge: '', // NEW - for max tenure calculation (retirement at 65)
     loanAmountNeeded: '',
     monthlyIncome: '',
     loanTenure: '20', // years - default 20
@@ -397,7 +398,7 @@ const PrimePathMortgages = () => {
   };
 
   const handleLayer1Submit = () => {
-    const requiredLayer1 = ['employmentType', 'customerPreference', 'loanAmountNeeded', 'monthlyIncome', 'loanTenure', 'existingEMIs', 'borrowerType', 'missedPayments12m', 'missedPayments5y', 'cibilRange'];
+    const requiredLayer1 = ['employmentType', 'customerPreference', 'customerAge', 'loanAmountNeeded', 'monthlyIncome', 'loanTenure', 'existingEMIs', 'borrowerType', 'missedPayments12m', 'missedPayments5y', 'cibilRange'];
     const allFilled = requiredLayer1.every(f => layer1Data[f] !== '');
     if (!allFilled) {
       alert('❌ Please fill all fields to continue');
@@ -443,10 +444,16 @@ const PrimePathMortgages = () => {
   };
 
 const handleLayer2Submit = () => {
+  console.log('Layer 2 Submit Clicked');
+  console.log('Layer 2 Data:', layer2Data);
+  
   const requiredFields = ['loanType', 'propertySubType', 'propertyCategory', 'decidingDocument', 'propertyValue', 'propertyLocation'];
   const allRequiredFilled = requiredFields.every(field => layer2Data[field] !== '');
+  
   if (!allRequiredFilled) {
-    alert('❌ Please fill all required fields including property type');
+    const missing = requiredFields.filter(field => !layer2Data[field]);
+    alert(`❌ Please fill all required fields. Missing: ${missing.join(', ')}`);
+    console.error('Missing fields:', missing);
     return;
   }
   
@@ -476,10 +483,16 @@ const handleLayer2Submit = () => {
     if (!proceed) return;
   }
   
-  if (layer2Data.microMarket) {
+  console.log('All validations passed. Loan type:', layer2Data.loanType);
+  
+  if (layer2Data.loanType === 'LAP') {
+    console.log('LAP case - going to KYC gate');
+    setShowKycGate(true);
+  } else if (layer2Data.microMarket) {
+    console.log('Home Loan with micro-market - going to property insights');
     setCurrentLayer('propertyInsights');
   } else {
-    // Show KYC gate before results
+    console.log('Home Loan without micro-market - going to KYC gate');
     setShowKycGate(true);
   }
 };
@@ -587,6 +600,25 @@ const handleLayer2Submit = () => {
           </div>
         </div>
 
+        {/* CUSTOMER AGE - For max tenure calculation */}
+        <div className="input-group">
+          <label>👤 Your Current Age</label>
+          <input
+            type="number"
+            placeholder="e.g., 35"
+            min="21"
+            max="70"
+            value={layer1Data.customerAge}
+            onChange={(e) => setLayer1Data({...layer1Data, customerAge: e.target.value})}
+            className="text-input"
+            style={{padding:'12px 16px', width:'100%', border:'2px solid #e2e8f0', borderRadius:'10px'}}
+          />
+          <span className="hint">Used to calculate maximum loan tenure (retirement age: 65 years)</span>
+          {layer1Data.customerAge && (parseInt(layer1Data.customerAge) < 21 || parseInt(layer1Data.customerAge) > 70) && (
+            <span className="error-hint">⚠️ Age must be between 21 and 70 years</span>
+          )}
+        </div>
+
         <div className="input-group">
           <label>How much loan do you need?</label>
           <div className="currency-input">
@@ -633,14 +665,22 @@ const handleLayer2Submit = () => {
             onChange={(e) => setLayer1Data({...layer1Data, loanTenure: e.target.value})}
             className="select-input"
           >
-            <option value="5">5 Years</option>
-            <option value="10">10 Years</option>
-            <option value="15">15 Years</option>
-            <option value="20">20 Years (Recommended)</option>
-            <option value="25">25 Years</option>
-            <option value="30">30 Years</option>
+            {(() => {
+              const age = parseInt(layer1Data.customerAge) || 30;
+              const maxTenure = Math.min(30, Math.max(5, 65 - age));
+              const tenures = [5, 10, 15, 20, 25, 30];
+              return tenures.filter(t => t <= maxTenure).map(years => (
+                <option key={years} value={years}>
+                  {years} Years {years === 20 && maxTenure >= 20 ? '(Recommended)' : ''} {years === maxTenure && age > 35 ? '(Max for your age)' : ''}
+                </option>
+              ));
+            })()}
           </select>
-          <span className="hint">Longer tenure = lower EMI but higher total interest paid</span>
+          <span className="hint">
+            {layer1Data.customerAge && parseInt(layer1Data.customerAge) > 35 
+              ? `Max ${Math.min(30, 65 - parseInt(layer1Data.customerAge))} years based on retirement age (65 years)`
+              : 'Longer tenure = lower EMI but higher total interest'}
+          </span>
         </div>
 
         <div className="input-group">
@@ -943,7 +983,7 @@ const handleLayer2Submit = () => {
       <option value="">Select your area...</option>
       {NCR_MICROMARKETS[layer2Data.propertyLocation].map(zone => (
         <option key={zone.id} value={zone.id}>
-          {zone.name} ({zone.sectors}) • ₹{zone.avgPrice.toLocaleString()}/sq ft • {zone.growth}
+          {zone.name} ({zone.sectors})
         </option>
       ))}
     </select>
@@ -1059,7 +1099,10 @@ const renderPropertyInsights = () => {
   const propertyVal = parseInt(layer2Data.propertyValue);
   const isApartment = layer2Data.propertySubType === 'apartment';
   const isUnderConstruction = layer2Data.propertyCategory === 'builder-new';
-  const estimatedSqFt = Math.round(propertyVal / zoneData.avgPrice);
+  // Use user's carpet area if provided, otherwise estimate from property value
+  const estimatedSqFt = layer2Data.carpetArea && parseInt(layer2Data.carpetArea) > 0
+    ? parseInt(layer2Data.carpetArea)
+    : Math.round(propertyVal / zoneData.avgPrice);
   // Price difference now calculated inside confidence score logic
   
   // GST/TDS cost calculations (apartments only)
@@ -1478,6 +1521,7 @@ const renderPropertyInsights = () => {
           
           // Financial Profile (Layer 1)
           employment_type: layer1Data.employmentType,
+          customer_age: parseInt(layer1Data.customerAge),
           monthly_salary: parseInt(layer1Data.monthlyIncome),
           loan_amount_needed: parseInt(layer1Data.loanAmountNeeded),
           loan_tenure: parseInt(layer1Data.loanTenure),
