@@ -3,8 +3,8 @@ import { Home, Briefcase, Calculator, FileText, TrendingUp, Info, CheckCircle, A
 import { createClient } from '@supabase/supabase-js';
 
 // SUPABASE CONNECTION
-const supabaseUrl = 'https://maqbmrdxnxeuhrtcguqa.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcWJtcmR4bnhldWhydGNndXFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxMjE2MDMsImV4cCI6MjA4NDY5NzYwM30.akvny8A5QGrZSgAtXhh44IXrk-mMGTOGt7lRfb7r8D0';
+const supabaseUrl = 'https://rbbktlpaijkozfenyrsf.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYmt0bHBhaWprb3pmZW55cnNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNzYxNDAsImV4cCI6MjA4Nzg1MjE0MH0.vB2LOysAyOO3u6iUg5w6pa7dmXGq0G2fwCicpWKv5w8';
 // SUPABASE CONNECTION (with error handling)
 let supabase = null;
 try {
