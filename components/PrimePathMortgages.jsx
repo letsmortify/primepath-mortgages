@@ -1331,10 +1331,7 @@ const PrimePathMortgages = () => {
   💬 Book Free Consultation on WhatsApp
 </a>
 </div>
-      </div>
-    );
-  };
-
+  
   return (
     <div className="app">
       {showKycGate && renderKycGate()}
