@@ -12,11 +12,3 @@ export default function AdminPage() {
   return <LeadsDashboard />;
 }
 ```
-
-5. Commit
-
----
-
-**Your dashboard URL will be:**
-```
-primepath-mortgages.vercel.app/admin?leads=primepath2026
