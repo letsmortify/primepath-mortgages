@@ -40,15 +40,70 @@ const checkAPFStatus = (builderName) => {
 // MNC maxDBR corrected to 0.40 (strict internal cap)
 // Added legalFee (₹) and processingSpeedDays
 const BANK_POLICIES = {
-  sbi:      { name: 'State Bank of India',   shortName: 'SBI',      category: 'Government',    ltvHL: 0.80, ltvLAP: 0.70, maxDBR: 0.50, processingFee: 0.35, legalFee: 5000,  rateHL: 8.50, rateLAP: 9.25, speedDays: '25-35',  strengths: ['MCLR-linked rate cuts', 'Lowest processing fees', 'Government backing', 'PMAY subsidy enabled'] },
-  pnb:      { name: 'Punjab National Bank',  shortName: 'PNB',      category: 'Government',    ltvHL: 0.80, ltvLAP: 0.65, maxDBR: 0.60, processingFee: 0.25, legalFee: 4500,  rateHL: 8.40, rateLAP: 9.15, speedDays: '25-40',  strengths: ['Highest DBR acceptance (60%)', 'Lowest processing fee (0.25%)', 'Fast for Govt employees'] },
-  canara:   { name: 'Canara Bank',           shortName: 'Canara',   category: 'Government',    ltvHL: 0.85, ltvLAP: 0.70, maxDBR: 0.50, processingFee: 0.30, legalFee: 5000,  rateHL: 8.55, rateLAP: 9.30, speedDays: '25-35',  strengths: ['Highest LTV (85%)', 'Women borrower rate discount', 'Green home benefits'] },
-  hdfc:     { name: 'HDFC Bank',             shortName: 'HDFC',     category: 'Private',       ltvHL: 0.90, ltvLAP: 0.70, maxDBR: 0.75, processingFee: 0.50, legalFee: 7500,  rateHL: 8.75, rateLAP: 9.50, speedDays: '10-18',  strengths: ['Fastest processing (10-18 days)', 'Highest LTV 90%', 'Strong APF builder network', 'Digital journey'] },
-  icici:    { name: 'ICICI Bank',            shortName: 'ICICI',    category: 'Private',       ltvHL: 0.90, ltvLAP: 0.65, maxDBR: 0.75, processingFee: 0.50, legalFee: 7000,  rateHL: 8.70, rateLAP: 9.45, speedDays: '12-20',  strengths: ['Quick disbursement', 'Pre-approved offers', 'Flexible for self-employed'] },
-  hsbc:     { name: 'HSBC',                  shortName: 'HSBC',     category: 'Multinational', ltvHL: 0.80, ltvLAP: 0.60, maxDBR: 0.40, processingFee: 0.50, legalFee: 10000, rateHL: 8.85, rateLAP: 9.60, speedDays: '15-25',  strengths: ['Premium service', 'NRI-friendly', 'Global network'] },
-  standard: { name: 'Standard Chartered',    shortName: 'StanChart', category: 'Multinational', ltvHL: 0.80, ltvLAP: 0.60, maxDBR: 0.40, processingFee: 0.50, legalFee: 10000, rateHL: 8.90, rateLAP: 9.65, speedDays: '15-25',  strengths: ['Personalized banking', 'Premium HNI clients', 'Fast track processing'] },
+  sbi: {
+    name:'State Bank of India', shortName:'SBI', category:'Government',
+    ltvHL:0.80, ltvLAP:0.70, maxDBR:0.50,
+    rateByClBIL:{ excellent:7.25, good:7.75, fair:8.25 },
+    rateHL:7.25, rateLAP:8.50,
+    processingFee:0.35, processingFeeCap:10000, processingFeeMin:2000,
+    legalFee:5000, minCIBIL:650, speedDays:'25-35',
+    strengths:['Lowest rate (7.25% for CIBIL 750+)','Processing capped at ₹10,000 — saves ₹20K+ vs private banks','Every RBI rate cut reflects in your EMI (EBLR-linked)','PMAY subsidy eligible for first-time buyers']
+  },
+  pnb: {
+    name:'Punjab National Bank', shortName:'PNB', category:'Government',
+    ltvHL:0.80, ltvLAP:0.65, maxDBR:0.60,
+    rateByClBIL:{ excellent:7.20, good:7.65, fair:8.10 },
+    rateHL:7.20, rateLAP:8.25,
+    processingFee:0.35, processingFeeCap:null, processingFeeMin:2500,
+    legalFee:4500, minCIBIL:650, speedDays:'25-40',
+    strengths:['Lowest rate overall (7.20%) + highest flexibility (60% cap)','Preferred bank for Govt/PSU employees — dedicated schemes','No processing fee cap — percentage lowest at 0.35%','PNB Pride scheme: pre-approved for salary account holders']
+  },
+  canara: {
+    name:'Canara Bank', shortName:'Canara', category:'Government',
+    ltvHL:0.85, ltvLAP:0.70, maxDBR:0.50,
+    rateByClBIL:{ excellent:7.15, good:7.65, fair:8.20 },
+    rateHL:7.15, rateLAP:8.25,
+    processingFee:0.50, processingFeeCap:null, processingFeeMin:1500,
+    legalFee:5000, minCIBIL:650, speedDays:'25-35',
+    strengths:['Lowest rate of all banks (7.15%) + highest LTV (85%)','Women co-borrower: additional 0.05% discount','Repo-linked — every future RBI cut reflects immediately','Borrow the most at the lowest rate — best combination']
+  },
+  hdfc: {
+    name:'HDFC Bank', shortName:'HDFC', category:'Private',
+    ltvHL:0.90, ltvLAP:0.70, maxDBR:0.75,
+    rateByClBIL:{ excellent:7.90, good:8.30, fair:8.70 },
+    rateHL:7.90, rateLAP:9.25,
+    processingFee:0.50, processingFeeCap:null, processingFeeMin:3000,
+    legalFee:7500, minCIBIL:700, speedDays:'10-18',
+    strengths:['Fastest disbursal in India: 10–18 days','Highest LTV at 90% — minimum down payment needed','Largest APF builder network in NCR','Full digital process — minimal branch visits']
+  },
+  icici: {
+    name:'ICICI Bank', shortName:'ICICI', category:'Private',
+    ltvHL:0.90, ltvLAP:0.65, maxDBR:0.75,
+    rateByClBIL:{ excellent:7.45, good:8.05, fair:8.50 },
+    rateHL:7.45, rateLAP:9.10,
+    processingFee:0.50, processingFeeCap:null, processingFeeMin:3000,
+    legalFee:7000, minCIBIL:700, speedDays:'12-20',
+    strengths:['Best private bank rate at 7.45% (CIBIL 750+, pre-approved)','Step-up EMI: lower payments early, higher as income grows','Pre-approved for ICICI salary account holders','Best self-employed underwriting — ITR averaged over 2 years']
+  },
+  hsbc: {
+    name:'HSBC', shortName:'HSBC', category:'Multinational',
+    ltvHL:0.80, ltvLAP:0.60, maxDBR:0.40,
+    rateByClBIL:{ excellent:8.50, good:8.85, fair:null },
+    rateHL:8.50, rateLAP:9.50,
+    processingFee:0.50, processingFeeCap:null, processingFeeMin:10000,
+    legalFee:10000, minCIBIL:750, speedDays:'15-25',
+    strengths:['Premium relationship banking — dedicated RM from day one','NRI/foreign income acceptance','Global account integration for overseas fund transfers']
+  },
+  standard: {
+    name:'Standard Chartered', shortName:'StanChart', category:'Multinational',
+    ltvHL:0.80, ltvLAP:0.60, maxDBR:0.40,
+    rateByClBIL:{ excellent:8.60, good:9.00, fair:null },
+    rateHL:8.60, rateLAP:9.60,
+    processingFee:0.50, processingFeeCap:null, processingFeeMin:10000,
+    legalFee:10000, minCIBIL:750, speedDays:'15-25',
+    strengths:['Premium HNI banking — Gold/Platinum holders get fastest track','International recognition for NRI and global property portfolios','Dedicated priority processing for top executive profiles']
+  },
 };
-
 // ─── NBFC / HFC POLICIES (triggered when CIBIL < 650) ───────────────────────
 const NBFC_POLICIES = {
   lic_hfl:   { name: 'LIC Housing Finance',   shortName: 'LIC HFL',  category: 'NBFC-HFC', ltvHL: 0.75, ltvLAP: 0.60, maxDBR: 0.55, processingFee: 0.25, legalFee: 5000,  rateHL: 9.10, rateLAP: 10.00, speedDays: '20-30', minCIBIL: 550, strengths: ['Accepts CIBIL from 550+', 'Government backed HFC', 'Long track record', 'Low processing fee'] },
@@ -285,12 +340,13 @@ const generateMatchReason = (bank, profile, profileTier) => {
  * Calculate total upfront cost (RBI compliant: APR disclosure)
  */
 const calcUpfrontCosts = (bank, loanAmount) => {
-  const processingFee = Math.round(loanAmount * bank.processingFee / 100);
-  const gstOnFee = Math.round(processingFee * 0.18); // 18% GST on processing fee
+  let processingFee = Math.round(loanAmount * bank.processingFee / 100);
+  if (bank.processingFeeCap) processingFee = Math.min(processingFee, bank.processingFeeCap);
+  if (bank.processingFeeMin) processingFee = Math.max(processingFee, bank.processingFeeMin);
+  const gstOnFee = Math.round(processingFee * 0.18);
   const legalFee = bank.legalFee || 7500;
-  const technicalFee = 3500; // standard valuation fee
-  const total = processingFee + gstOnFee + legalFee + technicalFee;
-  return { processingFee, gstOnFee, legalFee, technicalFee, total };
+  const technicalFee = 3500;
+  return { processingFee, gstOnFee, legalFee, technicalFee, total: processingFee + gstOnFee + legalFee + technicalFee };
 };
 
 // ─── MAIN ENGINE: matchBanks() ────────────────────────────────────────────────
@@ -1266,7 +1322,14 @@ const PrimePathMortgages = () => {
         <div className="cta-section">
           <h3>Ready to Proceed?</h3>
           <p>Connect with our loan expert for document verification and bank submission</p>
-          <button className="cta-button">Schedule Free Consultation</button>
+          href="https://wa.me/919999829407?text=Hi%2C%20I%20completed%20my%20PrimePath%20assessment%20and%20want%20to%20discuss%20next%20steps"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="cta-button"
+  style={{display:'inline-flex',alignItems:'center',gap:'8px',textDecoration:'none'}}
+>
+  💬 Book Free Consultation on WhatsApp
+</a>
         </div>
       </div>
     );
