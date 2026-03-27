@@ -7,7 +7,7 @@ const supabase = createClient(
 );
 
 // ─── CONFIG — change these ────────────────────────────────────────────────────
-const YOUR_WHATSAPP = '919XXXXXXXXX'; // replace with your number
+const YOUR_WHATSAPP = '919999829407'; // replace with your number
 const YOUR_NAME     = 'Abhinav';
 
 // ─── TIER COLOURS ─────────────────────────────────────────────────────────────
