@@ -250,17 +250,31 @@ const runEngine = (l1, l2) => {
 // COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
 const PrimePathMortgages = () => {
-  const load = (key, fallback) => { try { const v = sessionStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; } };
-  const save = (key, val) => { try { sessionStorage.setItem(key, JSON.stringify(val)); } catch {} };
-  const [step, setStepRaw]    = useState(() => load('pp_step', 'intro'));
-  const [l1, setL1Raw]        = useState(() => load('pp_l1', { employmentType:'', customerPreference:'', customerAge:'', loanAmountNeeded:'', monthlyIncome:'', loanTenure:'20', existingEMIs:'', borrowerType:'', missedPayments12m:'', missedPayments5y:'', cibilRange:'' }));
-  const [l2, setL2Raw]        = useState(() => load('pp_l2', { loanType:'', propertySubType:'', propertyUsage:'', propertyCategory:'', decidingDocument:'', propertyValue:'', propertyLocation:'', microMarket:'', buildingSocietyName:'', builderName:'', bhkConfig:'', propertyAge:'' }));
-  const [results, setResultsRaw] = useState(() => load('pp_results', null));
-  const [kyc, setKyc]         = useState({ name:'', phone:'', email:'', terms:false, consent:false });
-  const [showKyc, setShowKyc] = useState(false);
-  const setStep = (v) => { setStepRaw(v); save('pp_step', v); };
-  const setL1   = (v) => { setL1Raw(v);   save('pp_l1', v); };
-  const setL2   = (v) => { setL2Raw(v);   save('pp_l2', v); };
+  // sessionStorage helpers — SSR-safe (Next.js compatible)
+  const save = (key, val) => { if (typeof window !== 'undefined') { try { sessionStorage.setItem(key, JSON.stringify(val)); } catch {} } };
+  const load = (key, fallback) => { if (typeof window === 'undefined') return fallback; try { const v = sessionStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; } };
+
+  const L1_DEFAULT = { employmentType:'', customerPreference:'', customerAge:'', loanAmountNeeded:'', monthlyIncome:'', loanTenure:'20', existingEMIs:'', borrowerType:'', missedPayments12m:'', missedPayments5y:'', cibilRange:'' };
+  const L2_DEFAULT = { loanType:'', propertySubType:'', propertyUsage:'', propertyCategory:'', decidingDocument:'', propertyValue:'', propertyLocation:'', microMarket:'', buildingSocietyName:'', builderName:'', bhkConfig:'', propertyAge:'' };
+
+  const [step, setStepRaw]       = useState('intro');
+  const [l1, setL1Raw]           = useState(L1_DEFAULT);
+  const [l2, setL2Raw]           = useState(L2_DEFAULT);
+  const [results, setResultsRaw] = useState(null);
+  const [kyc, setKyc]            = useState({ name:'', phone:'', email:'', terms:false, consent:false });
+  const [showKyc, setShowKyc]    = useState(false);
+
+  // Hydrate from sessionStorage after mount (client-only)
+  useEffect(() => {
+    setStepRaw(load('pp_step', 'intro'));
+    setL1Raw(load('pp_l1', L1_DEFAULT));
+    setL2Raw(load('pp_l2', L2_DEFAULT));
+    setResultsRaw(load('pp_results', null));
+  }, []);
+
+  const setStep    = (v) => { setStepRaw(v);    save('pp_step', v); };
+  const setL1      = (v) => { setL1Raw(v);      save('pp_l1', v); };
+  const setL2      = (v) => { setL2Raw(v);      save('pp_l2', v); };
   const setResults = (v) => { setResultsRaw(v); save('pp_results', v); };
 
   const maxTenure = () => {
@@ -704,9 +718,27 @@ const PrimePathMortgages = () => {
     const pv   = parseInt(l2.propertyValue);
     const isUC = l2.propertyCategory === 'builder-new';
     const gst  = isUC ? Math.round(pv * 0.05) : 0;
-    const stamp = Math.round(pv * (l2.propertyLocation === 'delhi' ? 0.06 : 0.05));
-    const reg  = Math.round(pv * 0.01);
-    const total = gst + stamp + reg;
+    // Verified stamp duty rates 2026 (gender-neutral average shown)
+    // Delhi: 6% male / 4% female | UP (Noida/GN/Ghz): 7% male / 6% female
+    // Haryana (Gurugram/Faridabad): 7% male / 5% female
+    const STAMP_RATES = {
+      delhi:         { male: 0.06, female: 0.04, label: '6% (male) / 4% (female)' },
+      gurugram:      { male: 0.07, female: 0.05, label: '7% (male) / 5% (female)' },
+      noida:         { male: 0.07, female: 0.06, label: '7% (male) / 6% (female)' },
+      'greater-noida':{ male: 0.07, female: 0.06, label: '7% (male) / 6% (female)' },
+      ghaziabad:     { male: 0.07, female: 0.06, label: '7% (male) / 6% (female)' },
+      faridabad:     { male: 0.07, female: 0.05, label: '7% (male) / 5% (female)' },
+    };
+    const stampRates = STAMP_RATES[l2.propertyLocation] || { male: 0.07, female: 0.06, label: '7% (male) / 6% (female)' };
+    const stampMale   = Math.round(pv * stampRates.male);
+    const stampFemale = Math.round(pv * stampRates.female);
+    const stamp = stampMale; // show male rate as default; female shown in table
+    // Registration: Delhi/UP = 1% | Haryana (Gurugram/Faridabad) = capped at ₹50,000
+    const isHaryana = l2.propertyLocation === 'gurugram' || l2.propertyLocation === 'faridabad';
+    const reg = isHaryana
+      ? Math.min(Math.round(pv * 0.01), 50000)
+      : Math.round(pv * 0.01);
+    const total = gst + stampMale + reg; // total shown for male buyer (conservative)
     const sqft  = Math.round(pv / zone.avgPrice);
     const diff  = ((pv/sqft) - zone.avgPrice) / zone.avgPrice * 100;
     const scores = {
@@ -778,8 +810,17 @@ const PrimePathMortgages = () => {
             {isUC
               ? <div className="cost-row highlight-row"><span>GST (Under-Construction)</span><span>5%</span><span>₹{(gst/100000).toFixed(1)}L</span></div>
               : <div className="cost-row good-row"><span>GST (Ready-to-Move)</span><span>NIL ✅</span><span>₹0</span></div>}
-            <div className="cost-row"><span>Stamp Duty</span><span>{l2.propertyLocation === 'delhi' ? '6%' : '5%'}</span><span>₹{(stamp/100000).toFixed(1)}L</span></div>
-            <div className="cost-row"><span>Registration</span><span>1%</span><span>₹{(reg/100000).toFixed(1)}L</span></div>
+            <div className="cost-row highlight-row">
+              <span>Stamp Duty <span style={{fontSize:'11px',color:'#64748b'}}>(male buyer)</span></span>
+              <span>{stampRates.label.split('/')[0].trim()}</span>
+              <span>₹{(stampMale/100000).toFixed(1)}L</span>
+            </div>
+            <div className="cost-row good-row">
+              <span>Stamp Duty <span style={{fontSize:'11px',color:'#16a34a'}}>(female buyer saves)</span></span>
+              <span>{stampRates.label.split('/')[1].trim()}</span>
+              <span>₹{(stampFemale/100000).toFixed(1)}L ✅</span>
+            </div>
+            <div className="cost-row"><span>Registration</span><span>{isHaryana ? 'Capped ₹50K' : '1%'}</span><span>₹{(reg/1000).toFixed(0)}K</span></div>
             <div className="cost-row total-row"><span><strong>Total Additional</strong></span><span></span><span><strong>₹{(total/100000).toFixed(1)}L ({((total/pv)*100).toFixed(1)}%)</strong></span></div>
           </div>
           <div className="cost-note">💡 Banks fund only the base price. Stamp duty, registration and GST must come from your own pocket.</div>
