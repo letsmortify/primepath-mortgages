@@ -340,6 +340,44 @@ const PrimePathMortgages = () => {
     </label>
   );
 
+  // ── KYC GATE (defined first so all steps can reference it) ────────────────
+  const KycGate = () => (
+    <div className="kyc-gate-overlay">
+      <div className="kyc-gate-modal">
+        <h2>🔐 Almost There!</h2>
+        <p className="kyc-subtitle">Your matches are ready — just confirm your details</p>
+        <div className="kyc-form">
+          {[{ label:'Full Name', type:'text', key:'name', ph:'As per PAN card' },
+            { label:'Mobile Number', type:'tel', key:'phone', ph:'10-digit mobile' },
+            { label:'Email Address', type:'email', key:'email', ph:'your@email.com' },
+          ].map(f => (
+            <div key={f.key} className="kyc-input-group">
+              <label>{f.label}</label>
+              <input type={f.type} placeholder={f.ph} value={kyc[f.key]}
+                onChange={e => setKyc({ ...kyc, [f.key]: e.target.value })} />
+            </div>
+          ))}
+          <div className="kyc-terms">
+            <label className="terms-checkbox">
+              <input type="checkbox" checked={kyc.terms} onChange={e => setKyc({ ...kyc, terms: e.target.checked })} />
+              <span>I agree to Terms of Service. Results are indicative — not financial advice.</span>
+            </label>
+            <label className="terms-checkbox" style={{ marginTop:'12px' }}>
+              <input type="checkbox" checked={kyc.consent} onChange={e => setKyc({ ...kyc, consent: e.target.checked })} />
+              <span>I consent to be contacted by PrimePath via phone / email / WhatsApp</span>
+            </label>
+          </div>
+          <div className="kyc-actions">
+            <button className="btn-back" onClick={() => setShowKyc(false)}>← Back</button>
+            <button className="btn-kyc-submit" onClick={submitKyc}>Show My Matches 🎯</button>
+          </div>
+        </div>
+        <p style={{ fontSize:'12px', color:'#94a3b8', textAlign:'center', marginTop:'16px' }}>🔒 Stored on Indian servers per RBI Digital Lending Directions 2025. Never sold.</p>
+      </div>
+    </div>
+  );
+
+
   // ── INTRO ────────────────────────────────────────────────────────────────────
   if (step === 'intro') return (
     <div className="intro-container">
@@ -835,42 +873,6 @@ const PrimePathMortgages = () => {
   }
 
   // ── KYC GATE ─────────────────────────────────────────────────────────────────
-  const KycGate = () => (
-    <div className="kyc-gate-overlay">
-      <div className="kyc-gate-modal">
-        <h2>🔐 Almost There!</h2>
-        <p className="kyc-subtitle">Your matches are ready — just confirm your details</p>
-        <div className="kyc-form">
-          {[{ label:'Full Name', type:'text', key:'name', ph:'As per PAN card' },
-            { label:'Mobile Number', type:'tel', key:'phone', ph:'10-digit mobile' },
-            { label:'Email Address', type:'email', key:'email', ph:'your@email.com' },
-          ].map(f => (
-            <div key={f.key} className="kyc-input-group">
-              <label>{f.label}</label>
-              <input type={f.type} placeholder={f.ph} value={kyc[f.key]}
-                onChange={e => setKyc({ ...kyc, [f.key]: e.target.value })} />
-            </div>
-          ))}
-          <div className="kyc-terms">
-            <label className="terms-checkbox">
-              <input type="checkbox" checked={kyc.terms} onChange={e => setKyc({ ...kyc, terms: e.target.checked })} />
-              <span>I agree to Terms of Service. Results are indicative — not financial advice.</span>
-            </label>
-            <label className="terms-checkbox" style={{ marginTop:'12px' }}>
-              <input type="checkbox" checked={kyc.consent} onChange={e => setKyc({ ...kyc, consent: e.target.checked })} />
-              <span>I consent to be contacted by PrimePath via phone / email / WhatsApp</span>
-            </label>
-          </div>
-          <div className="kyc-actions">
-            <button className="btn-back" onClick={() => setShowKyc(false)}>← Back</button>
-            <button className="btn-kyc-submit" onClick={submitKyc}>Show My Matches 🎯</button>
-          </div>
-        </div>
-        <p style={{ fontSize:'12px', color:'#94a3b8', textAlign:'center', marginTop:'16px' }}>🔒 Stored on Indian servers per RBI Digital Lending Directions 2025. Never sold.</p>
-      </div>
-    </div>
-  );
-
   // ── RESULTS ──────────────────────────────────────────────────────────────────
   if (step === 'results' && results) {
     const { profileTier, currentDBR, selfEquityPct, apfStatus, isLowCIBIL, matches, eliminated, capacityNow, capacity20yr, propCeiling, finalEligible, theoreticalMax, limitingFactor, dbrCap, tenure } = results;
