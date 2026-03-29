@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
-import { BANK_POLICIES, NBFC_POLICIES } from '../pages/banks';
+import { BANK_POLICIES, NBFC_POLICIES } from './banks';
 
 // ─── SUPABASE (fire-and-forget) ──────────────────────────────────────────────
 const supabaseUrl = 'https://rbbktlpaijkozfenyrsf.supabase.co';
@@ -1169,7 +1169,7 @@ const PrimePathMortgages = () => {
           <h3>Ready to Apply?</h3>
           <p>Our advisor will verify your documents and submit to the right bank — no agent fees</p>
           <a
-            href="https://wa.me/919XXXXXXXXX?text=Hi%2C%20I%20completed%20my%20PrimePath%20assessment%20and%20want%20to%20discuss%20next%20steps"
+            href="https://wa.me/919999829407?text=Hi%2C%20I%20completed%20my%20PrimePath%20assessment%20and%20want%20to%20discuss%20next%20steps"
             target="_blank"
             rel="noopener noreferrer"
             className="cta-button"
