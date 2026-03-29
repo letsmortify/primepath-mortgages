@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import { BANK_POLICIES, NBFC_POLICIES } from './banks';
@@ -250,12 +250,18 @@ const runEngine = (l1, l2) => {
 // COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
 const PrimePathMortgages = () => {
-  const [step, setStep]       = useState('intro');
-  const [l1, setL1]           = useState({ employmentType:'', customerPreference:'', customerAge:'', loanAmountNeeded:'', monthlyIncome:'', loanTenure:'20', existingEMIs:'', borrowerType:'', missedPayments12m:'', missedPayments5y:'', cibilRange:'' });
-  const [l2, setL2]           = useState({ loanType:'', propertySubType:'', propertyUsage:'', propertyCategory:'', decidingDocument:'', propertyValue:'', propertyLocation:'', microMarket:'', buildingSocietyName:'', builderName:'', bhkConfig:'', propertyAge:'' });
-  const [results, setResults] = useState(null);
+  const load = (key, fallback) => { try { const v = sessionStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; } };
+  const save = (key, val) => { try { sessionStorage.setItem(key, JSON.stringify(val)); } catch {} };
+  const [step, setStepRaw]    = useState(() => load('pp_step', 'intro'));
+  const [l1, setL1Raw]        = useState(() => load('pp_l1', { employmentType:'', customerPreference:'', customerAge:'', loanAmountNeeded:'', monthlyIncome:'', loanTenure:'20', existingEMIs:'', borrowerType:'', missedPayments12m:'', missedPayments5y:'', cibilRange:'' }));
+  const [l2, setL2Raw]        = useState(() => load('pp_l2', { loanType:'', propertySubType:'', propertyUsage:'', propertyCategory:'', decidingDocument:'', propertyValue:'', propertyLocation:'', microMarket:'', buildingSocietyName:'', builderName:'', bhkConfig:'', propertyAge:'' }));
+  const [results, setResultsRaw] = useState(() => load('pp_results', null));
   const [kyc, setKyc]         = useState({ name:'', phone:'', email:'', terms:false, consent:false });
   const [showKyc, setShowKyc] = useState(false);
+  const setStep = (v) => { setStepRaw(v); save('pp_step', v); };
+  const setL1   = (v) => { setL1Raw(v);   save('pp_l1', v); };
+  const setL2   = (v) => { setL2Raw(v);   save('pp_l2', v); };
+  const setResults = (v) => { setResultsRaw(v); save('pp_results', v); };
 
   const maxTenure = () => {
     const age = parseInt(l1.customerAge) || 30;
@@ -712,6 +718,8 @@ const PrimePathMortgages = () => {
     const overall    = Math.round((scores.price + scores.market + scores.legal + scores.rental) / 4);
     const scoreColor = overall >= 80 ? '#16a34a' : overall >= 65 ? '#d97706' : '#dc2626';
     return (
+      <>
+      {showKyc && <KycGate />}
       <div className="layer-container insights-v2" style={{ maxWidth:'960px' }}>
         <div className="layer-header">
           <div className="layer-badge">Property Intelligence</div>
@@ -781,6 +789,7 @@ const PrimePathMortgages = () => {
           <button className="btn-next" onClick={() => setShowKyc(true)}>See My Bank Matches <ArrowRight size={20} /></button>
         </div>
       </div>
+      </>
     );
   }
 
