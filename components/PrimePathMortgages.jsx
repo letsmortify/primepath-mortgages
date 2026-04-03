@@ -1217,6 +1217,31 @@ const PrimePathMortgages = () => {
 
         <AmortSection />
 
+        {/* ── RBI RIGHTS SECTION ──────────────────────────────────────────── */}
+        <div style={{ background:'#f8fafc', borderRadius:'16px', padding:'32px', marginBottom:'24px', border:'1px solid #e2e8f0' }}>
+          <h2 style={{ fontSize:'22px', fontWeight:'700', color:'#1e293b', marginBottom:'6px' }}>📜 Know Your Rights as a Borrower</h2>
+          <p style={{ color:'#64748b', marginBottom:'16px', fontSize:'14px' }}>RBI Digital Lending Directions 2025 — what every home buyer must know before signing</p>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))', gap:'16px' }}>
+            {[
+              { icon:'💳', title:'Key Fact Statement (KFS)', body:'Every bank MUST give you a KFS before disbursal showing the exact APR, all fees, and total loan cost. If they skip this, do not sign anything.' },
+              { icon:'💰', title:'Zero Prepayment Penalty', body:'On floating rate home loans, banks cannot charge any prepayment penalty. You can pay off your loan early at any time — no cost.' },
+              { icon:'📊', title:'Rate Transparency', body:'Ask if your rate is repo-linked (EBLR) or MCLR-linked. Repo-linked means every RBI rate cut automatically reduces your EMI.' },
+              { icon:'⚖️', title:'Written Rejection Reason', body:'If rejected, the bank must give you the reason in writing. Use this to fix your profile and reapply — it is your legal right.' },
+              { icon:'🏗️', title:'RERA Protection', body:'Banks can only fund RERA-registered projects. Any under-construction property without RERA registration cannot legally be funded.' },
+              { icon:'📞', title:'Grievance Redressal', body:'Complaints unresolved within 30 days can be escalated to the RBI Banking Ombudsman — bankingombudsman.rbi.org.in — completely free.' },
+            ].map((c, i) => (
+              <div key={i} style={{ background:'#fff', borderRadius:'12px', padding:'20px', border:'1px solid #e2e8f0', boxShadow:'0 1px 3px rgba(0,0,0,0.04)' }}>
+                <div style={{ fontSize:'28px', marginBottom:'8px' }}>{c.icon}</div>
+                <h4 style={{ fontSize:'15px', fontWeight:'700', color:'#1e293b', marginBottom:'8px' }}>{c.title}</h4>
+                <p style={{ fontSize:'13px', color:'#64748b', margin:0, lineHeight:'1.5' }}>{c.body}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop:'20px', padding:'14px 16px', background:'#eff6ff', borderRadius:'10px', fontSize:'13px', color:'#1e40af' }}>
+            📌 Reference: RBI Digital Lending Directions 2025 (May 8, 2025) · Grievances: <strong>bankingombudsman.rbi.org.in</strong>
+          </div>
+        </div>
+
         <div className="cta-section">
           <h3>Ready to Apply?</h3>
           <p>Our advisor will verify your documents and submit to the right bank — no agent fees</p>
